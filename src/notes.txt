@@ -1,0 +1,47 @@
+/*
+
+
+Bluetooth serial
+
+    deskwizard@mediaPC:~$ hcitool dev
+    Devices:
+      hci0  F8:16:54:2D:9E:B0
+      
+    deskwizard@mediaPC:~$ hcitool -i hci0 scan
+    Scanning ...
+      CC:50:E3:B6:B7:6E ESP_PSU
+      
+    deskwizard@mediaPC:~$ sudo rfcomm bind rfcomm0 CC:50:E3:B6:B7:6E
+    
+    deskwizard@mediaPC:~$ ls /dev/rfcomm*
+    /dev/rfcomm0
+
+
+
+    The encoders I use have 4 transitions between detents.
+
+
+    Possible rotary encoder states (in sequencial order).
+
+    Direction  |  Current Position  |  last Position
+  ----------------------------------------------------
+      CW                 2                   3
+      CW                 0                   2
+      CW                 1                   0
+      CW                 3                   1           <- transition currently used
+
+      CCW                1                   3
+      CCW                0                   1
+      CCW                2                   0
+      CCW                3                   2           <- transition currently used
+
+
+
+
+
+
+
+
+
+
+*/
