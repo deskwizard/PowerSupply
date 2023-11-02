@@ -1,7 +1,6 @@
 #include "control.h"
+#include "analog.h"
 
-#include <DAC7678.h> 
-DAC7678 dac(DAC_ADDR); 
 
 bool errorFlagChan1 = false;
 bool errorFlagChan2 = false;
@@ -13,38 +12,7 @@ bool modeSetting = MODE_CV;
 
 bool railSetting = DUAL; // Need to default to DUAL for the LCD to work (WTF??)
 
-// Needs to be signed for encoder step size things
-int16_t chan1Vcode = 500;
-int16_t chan1Icode = -1; // ----------- WTF?? -----------
-int16_t chan2Vcode = 500;
-int16_t chan2Icode = 0;
-
-void dac_init() {
-
-  dac.begin(EXT); // Vref provided by ADC
-  dac.reset();
-  dac.offMode(L1K);
-  dac.disable();
-
-  // Preload in case we need offsetting later
-  dac.set(DAC_CHAN1_V, chan1Vcode);
-  dac.set(DAC_CHAN2_V, chan2Vcode);
-  dac.set(DAC_CHAN1_I, chan1Icode);
-  dac.set(DAC_CHAN2_I, chan2Icode);
-
-
-//---------------------------------------------------------
-  // Current outputs always on (TESTING)
-  dac.setChannelState(DAC_CHAN1_I, true);
-  dac.setChannelState(DAC_CHAN2_I, true);
-
-  // Here
-  // dac.setChannelState(DAC_CHAN1_V, true);
-  // dac.setChannelState(DAC_CHAN2_V, true);
-
-  //---------------------------------------
-}
-
+/************************************************************/
 void changeChan1I(bool direction) {
 
   if (direction == UP) {
@@ -158,50 +126,6 @@ void changeChan2V(bool direction) {
   displayUpdateChan2V();
 }
 
-void setChan1V() {
-  dac.set(DAC_CHAN1_V, chan1Vcode);
-  printChan1V();
-}
-
-void setChan1V(uint16_t code) {
-  chan1Vcode = code;
-  dac.set(DAC_CHAN1_V, chan1Vcode);
-  printChan1V();
-}
-
-void setChan1I() {
-  dac.set(DAC_CHAN1_I, chan1Icode);
-  printChan1I();
-}
-
-void setChan1I(uint16_t code) {
-  chan1Icode = code;
-  dac.set(DAC_CHAN1_I, chan1Icode);
-  printChan1I();
-}
-
-void setChan2V() {
-  dac.set(DAC_CHAN2_V, chan2Vcode);
-  printChan2V();
-}
-
-void setChan2V(uint16_t code) {
-  chan2Vcode = code;
-  dac.set(DAC_CHAN2_V, chan2Vcode);
-  printChan2V();
-}
-
-void setChan2I() {
-  dac.set(DAC_CHAN2_I, chan2Icode);
-  printChan2I();
-}
-
-void setChan2I(uint16_t code) {
-  chan2Icode = code;
-  dac.set(DAC_CHAN2_I, chan2Icode);
-  printChan2I();
-}
-
 void toggleMode() {
 
   modeSetting = !modeSetting;
@@ -303,7 +227,9 @@ void toggleTracking() {
 
   if (tracking) {
     chan2Vcode = chan1Vcode;
-    dac.set(DAC_CHAN2_V, chan2Vcode);
+    //dac.set(DAC_CHAN2_V, chan2Vcode);
+    setChan2V(chan2Vcode);
+
     stepSizeEnc2 = stepSizeEnc1;
   }
 
@@ -348,7 +274,7 @@ void setChan1State(bool state) {
 
   chan1_enabled = state;
 
-  dac.setChannelState(DAC_CHAN1_V, chan1_enabled);
+  setChannelState(DAC_CHAN1_V, chan1_enabled);
 
   digitalWrite(OUT_VPLUS, chan1_enabled);
   expander.digitalWrite(PORT_B, LED_VPLUS_EN, chan1_enabled);
@@ -372,7 +298,7 @@ void setChan2State(bool state) {
 
   chan2_enabled = state;
 
-  // dac.setChannelState(DAC_CHAN2_V, chan2_enabled);
+  setChannelState(DAC_CHAN2_V, chan2_enabled);
 
   digitalWrite(OUT_VMINUS, chan2_enabled);
   expander.digitalWrite(PORT_B, LED_VMINUS_EN, chan2_enabled);
@@ -384,23 +310,4 @@ void setChan2State(bool state) {
     serial_println("Chan2 disabled");
   }
   /*************************************/
-}
-
-// debug
-void writeDAC() {
-
-  dac.enable();
-
-  static uint16_t dacValue = 0;
-
-  if (dacValue < 4000) {
-    dacValue = dacValue + 100;
-  } else {
-    dacValue = 0;
-  }
-
-  dac.set(0, dacValue);
-
-  Serial.print("DAC: ");
-  Serial.println(dacValue);
 }

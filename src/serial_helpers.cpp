@@ -1,6 +1,7 @@
 #include "control.h"
 #include "defines.h"
 #include "externs.h"
+#include "analog.h"
 /*
 
   TODO:
@@ -15,10 +16,7 @@
 float testFloat = 0.0;
 uint16_t test_code = 0;
 
-// void reactSerial(uint8_t c) {
 void handleSerial() {
-
-  // uint8_t c = 0;
 
   if (Serial.available()) {
 

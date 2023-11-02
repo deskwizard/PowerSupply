@@ -25,14 +25,13 @@ void encoder_init() {
 
   pinMode(ENC1_A_PIN, INPUT_PULLUP);
   pinMode(ENC1_B_PIN, INPUT_PULLUP);
-
-  // We need to pre-load the current values, else it might trigger on
-  // powerup/reset
-  currentEnc1Pos = getEnc1Pos();
-  lastEnc1Pos = currentEnc1Pos;
-
   pinMode(ENC2_A_PIN, INPUT_PULLUP);
   pinMode(ENC2_B_PIN, INPUT_PULLUP);
+
+  // We need to pre-load the current values,
+  // otherwise it might trigger on powerup/reset
+  currentEnc1Pos = getEnc1Pos();
+  lastEnc1Pos = currentEnc1Pos;
   currentEnc2Pos = getEnc2Pos();
   lastEnc2Pos = currentEnc2Pos;
 }
@@ -64,7 +63,7 @@ uint8_t IRAM_ATTR getEnc2Pos() {
   return enc2Pos;
 }
 
-// Called from loop()
+// Functions called from loop()
 void handleEncoders() {
 
   bool direction = DOWN;
@@ -124,10 +123,8 @@ void handleEncoders() {
   }
 }
 
-/************************************************************
- *                                                          *
- *                     Encoder switches                     *
- *                                                          *
+/************************************************************                                                     
+ *                     Encoder switches                     *                                                       
  ************************************************************/
 
 void keys_init() {
