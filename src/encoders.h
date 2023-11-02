@@ -3,11 +3,11 @@
 #include "defines.h"
 #include "externs.h"
 
-void encoder_init();
+void initEncoders();
 void handleEncoders();
 uint8_t IRAM_ATTR getEnc1Pos();
 uint8_t IRAM_ATTR getEnc2Pos();
 
-void keys_init();
+void initKeys();
 void IRAM_ATTR pinRead();
 void handleKeys();

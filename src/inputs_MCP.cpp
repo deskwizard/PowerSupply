@@ -5,7 +5,7 @@
 
 volatile bool ExpanderIntFlag = false;
 
-void expander_init() {
+void initExpander() {
 
   pinMode(IN_MCP_INT, INPUT_PULLUP);
 
@@ -46,7 +46,7 @@ void expander_init() {
 
   //  expander.digitalWrite(PORT_B, 0, HIGH);
 
-  expander.digitalWrite(PORT_B, LED_RANGE, railSetting);
+  expander.digitalWrite(PORT_B, LED_RANGE, getRailSetting());
   // expander.intPinMode(OPEN_DRAIN);
 }
 
@@ -66,9 +66,9 @@ void handleExpanderInputs() {
             } else {
               */
       if (key_state == UP) {
-        if (errorFlagChan1) {
-          errorFlagChan1 = false;
-          expander.digitalWrite(PORT_B, LED_VPLUS_EN, chan1_enabled);
+        if (getChannel1ErrorFlag()) {
+          clearChannel1ErrorFlag();
+          expander.digitalWrite(PORT_B, LED_VPLUS_EN, getChannel1State());
           serial_println("V+ err reset");
           displayCh1State();
         } else {
@@ -83,7 +83,7 @@ void handleExpanderInputs() {
     else if (intPin == SW_VMINUS_EN) {
 
       if (key_state == UP) {
-        if (railSetting == SINGLE) {
+        if (getRailSetting() == SINGLE) {
           serial_println("Single rail mode, V- not available");
           ExpanderIntFlag = false;
           return;
@@ -106,9 +106,9 @@ void handleExpanderInputs() {
     /******************** ERROR INPUTS **************************/
 
     else if (intPin == IN_CHAN1_ERR) {
-      if (key_state == HIGH && chan1_enabled == true && chan1Icode > 0) {
+      if (key_state == HIGH && getChannel1State() == true && chan1Icode > 0) {
         serial_println("V+ Error!");
-        errorFlagChan1 = true;
+        setChannel1ErrorFlag();
         setChan1State(false);
         displayCh1State();
       }
@@ -128,8 +128,8 @@ void handleExpanderInputs() {
     // Reuse for testing
     else if (intPin == IN_CHAN2_ERR) {
       if (key_state == UP) {
-        setChan1State(!chan1_enabled);
-        setChan2State(chan1_enabled);
+        setChan1State(!getChannel1State());
+        setChan2State(getChannel1State());
         displayCh2State();
         displayCh1State();
       }
@@ -151,7 +151,7 @@ void handleExpanderInputs() {
       // serial_println("mode key");
 
       if (key_state == UP) {
-        toggleMode();
+        toggleOutputMode();
       }
     }
 

@@ -1,28 +1,28 @@
 #include <Arduino.h>
 
-// I sometimes get a v+ encoder signal at boot, investigate....
-// the cap across doesn't have time to charge or something? would a delay help?
+// I sometimes get a V+ encoder signal at boot, investigate....
+// Maybe the cap across it doesn't have time to charge or something? 
+// Would a delay help?
 
 #include "LCD_defs.h"
 #include "control.h"
 #include "defines.h"
 #include "encoders.h"
-#include <ADS7828.h>
+#include "analog.h"
+//#include <ADS7828.h>
 
 MCP23017 expander(MCP_ADDR);
 
-#define ADC_READ_AVG 10
-ADS7828 adc(ADC_ADDR);
-int16_t chan1VRead;
-int16_t chan1IRead;
+//#define ADC_READ_AVG 10
+//ADS7828 adc(ADC_ADDR);
+//int16_t chan1VRead;
+//int16_t chan1IRead;
 
 // fuck this...
 // uint16_t readings[ADC_READ_AVG] = {0}; // the readings from the analog input
 // uint8_t readIndex = 0;                 // the index of the current reading
 // uint32_t total = 0;   // the running total
 // uint16_t average = 0; // the average
-
-void testAnalog();
 
 void setup() {
 
@@ -38,8 +38,8 @@ void setup() {
 
   // scanI2C();
 
-  dac_init();
-  adc.begin(INT);
+  initDAC();
+  initADC();
 
   // Serial.print("setup() running on core ");
   // Serial.println(xPortGetCoreID());
@@ -62,7 +62,7 @@ void setup() {
 
 #endif
 
-  keys_init();
+  initKeys();
 
   serial_println("Sketch starting... ");
   serial_println();
@@ -73,14 +73,14 @@ void setup() {
 
   // runSelfTest();
 
-  bt_init();
+  // initBT();
   // startBT();
 
-  // ota_init();
+  // initOTA();
 
-  encoder_init();
-  expander_init();
-  timer_init();
+  initEncoders();
+  initExpander();
+  initTimer();
 
   expander.digitalWrite(PORT_B, LED_VPLUS_EN, HIGH);
   expander.digitalWrite(PORT_B, LED_VMINUS_EN, HIGH);
@@ -108,12 +108,14 @@ void loop() {
   blinking();
 
   // debug
-  // testAnalog();
+  testAnalog();
 
+  handleAnalog();
+/*
   uint32_t currentMillis = millis();
   static uint32_t previousMillis = 0;
 
-  if (((uint32_t)(currentMillis - previousMillis) >= 1) && chan1_enabled) {
+  if (((uint32_t)(currentMillis - previousMillis) >= 1) && getChannel1State()) {
 
     static uint8_t readIndex = 0;
 
@@ -147,6 +149,7 @@ void loop() {
 
     previousMillis = currentMillis;
   }
+  */
 }
 
 void blinking() {
@@ -170,10 +173,10 @@ void blinking() {
 
     expander.digitalWrite(PORT_B, 2, !ledState);
 
-    if (errorFlagChan1) {
+    if (getChannel1ErrorFlag()) {
       expander.digitalWrite(PORT_B, LED_VPLUS_EN, ledState);
     }
-    if (errorFlagChan2) {
+    if (getChannel2ErrorFlag()) {
       expander.digitalWrite(PORT_B, LED_VMINUS_EN, ledState);
     }
 
@@ -239,6 +242,7 @@ void runSelfTest() {
 }
 
 void scanI2C() {
+
   while (1) {
 
     byte error, address;
@@ -277,7 +281,7 @@ void scanI2C() {
     delay(5000); // wait 5 seconds for next scan
   }
 }
-
+/*
 void readADC() {
 
   uint16_t read_value = 0;
@@ -313,3 +317,4 @@ void testAnalog() {
     previousMillis = currentMillis;
   }
 }
+*/

@@ -5,6 +5,21 @@
 void writeDAC();
 
 
+
+bool getRailSetting();
+bool getTrackingMode();
+bool getOutputMode();
+
+bool getChannel1State();
+void setChannel1ErrorFlag();
+bool getChannel1ErrorFlag();
+void clearChannel1ErrorFlag();
+
+bool getChannel2State();
+bool getChannel2ErrorFlag();
+void clearChannel2ErrorFlag();
+void setChannel2ErrorFlag();
+
 void toggleChan1State();
 void toggleChan2State();
 
@@ -16,7 +31,7 @@ void changeChan1I(bool direction);
 void changeChan2V(bool direction);
 void changeChan2I(bool direction);
 
-void toggleMode();
+void toggleOutputMode();
 // void toggleRail();
 void toggleTracking();
 

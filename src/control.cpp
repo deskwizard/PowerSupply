@@ -1,18 +1,36 @@
 #include "control.h"
 #include "analog.h"
 
+bool channel1ErrorFlag = false;
+bool channel2ErrorFlag = false;
 
-bool errorFlagChan1 = false;
-bool errorFlagChan2 = false;
-
-bool chan1_enabled = false;
-bool chan2_enabled = false;
-bool tracking = false;
-bool modeSetting = MODE_CV;
+bool channel1State = false;
+bool channel2State = false;
+bool trackingMode = false;
+bool outputMode = MODE_CV;
 
 bool railSetting = DUAL; // Need to default to DUAL for the LCD to work (WTF??)
 
 /************************************************************/
+
+bool getRailSetting() { return railSetting; }
+
+bool getTrackingMode() { return trackingMode; }
+
+bool getOutputMode() { return outputMode; }
+
+bool getChannel1State() { return channel1State; }
+bool getChannel1ErrorFlag() { return channel1ErrorFlag; }
+void clearChannel1ErrorFlag() { channel1ErrorFlag = false; }
+void setChannel1ErrorFlag() { channel1ErrorFlag = true; }
+
+bool getChannel2State() { return channel2State; }
+bool getChannel2ErrorFlag() { return channel2ErrorFlag; }
+void clearChannel2ErrorFlag() { channel2ErrorFlag = false; }
+void setChannel2ErrorFlag() { channel2ErrorFlag = true; }
+
+/************************************************************/
+
 void changeChan1I(bool direction) {
 
   if (direction == UP) {
@@ -36,7 +54,7 @@ void changeChan1I(bool direction) {
 
   setChan1I();
 
-  if (tracking) {
+  if (trackingMode) {
     chan2Icode = chan1Icode;
     setChan2I();
     displayUpdateChan2I();
@@ -64,7 +82,7 @@ void changeChan2I(bool direction) {
 
   setChan2I();
 
-  if (tracking) {
+  if (trackingMode) {
     chan1Icode = chan2Icode;
     setChan1I();
     displayUpdateChan1I();
@@ -90,7 +108,7 @@ void changeChan1V(bool direction) {
 
   setChan1V();
 
-  if (tracking) {
+  if (trackingMode) {
     chan2Vcode = chan1Vcode;
     setChan2V();
     displayUpdateChan2V();
@@ -117,7 +135,7 @@ void changeChan2V(bool direction) {
 
   setChan2V();
 
-  if (tracking) {
+  if (trackingMode) {
     chan1Vcode = chan2Vcode;
     setChan1V();
     displayUpdateChan1V();
@@ -126,13 +144,13 @@ void changeChan2V(bool direction) {
   displayUpdateChan2V();
 }
 
-void toggleMode() {
+void toggleOutputMode() {
 
-  modeSetting = !modeSetting;
+  outputMode = !outputMode;
 
   serial_print("Mode: ");
 
-  if (modeSetting == MODE_CV) {
+  if (outputMode == MODE_CV) {
     serial_println("CV");
   } else {
     serial_println("CC");
@@ -216,24 +234,23 @@ void toggleTracking() {
     return;
   }
 
-  tracking = !tracking;
+  trackingMode = !trackingMode;
 
   // Turn off both channels
   setChan1State(false);
   setChan2State(false);
 
   serial_print("Tracking mode: ");
-  serial_println(tracking);
+  serial_println(trackingMode);
 
-  if (tracking) {
+  if (trackingMode) {
     chan2Vcode = chan1Vcode;
-    //dac.set(DAC_CHAN2_V, chan2Vcode);
     setChan2V(chan2Vcode);
 
     stepSizeEnc2 = stepSizeEnc1;
   }
 
-  expander.digitalWrite(PORT_B, LED_TRACKING_EN, tracking);
+  expander.digitalWrite(PORT_B, LED_TRACKING_EN, trackingMode);
 
   displayTracking();
 }
@@ -242,10 +259,10 @@ void toggleChan1State() {
 
   // Will update the chan1_enabled variable so our call
   // to setChan2State doesn't need inversion
-  setChan1State(!chan1_enabled);
+  setChan1State(!channel1State);
 
-  if (tracking) {
-    setChan2State(chan1_enabled);
+  if (trackingMode) {
+    setChan2State(channel1State);
     displayCh2State();
   }
 
@@ -254,10 +271,10 @@ void toggleChan1State() {
 
 void toggleChan2State() {
 
-  setChan2State(!chan2_enabled);
+  setChan2State(!channel2State);
 
-  if (tracking) {
-    setChan1State(chan2_enabled);
+  if (trackingMode) {
+    setChan1State(channel2State);
     displayCh1State();
   }
 
@@ -267,23 +284,23 @@ void toggleChan2State() {
 void setChan1State(bool state) {
 
   // Return if we're already in that state
-  if (chan1_enabled == state) {
-    serial_println("Chan1 no change");
+  if (channel1State == state) {
+    serial_println("Channel 1 no change");
     return;
   }
 
-  chan1_enabled = state;
+  channel1State = state;
 
-  setChannelState(DAC_CHAN1_V, chan1_enabled);
+  setChannelState(DAC_CHAN1_V, channel1State);
 
-  digitalWrite(OUT_VPLUS, chan1_enabled);
-  expander.digitalWrite(PORT_B, LED_VPLUS_EN, chan1_enabled);
+  digitalWrite(OUT_VPLUS, channel1State);
+  expander.digitalWrite(PORT_B, LED_VPLUS_EN, channel1State);
 
   /*************** DEBUG ***************/
-  if (chan1_enabled) {
-    serial_println("Chan1 enabled");
+  if (channel1State) {
+    serial_println("Channel 1 enabled");
   } else {
-    serial_println("Chan1 disabled");
+    serial_println("Channel 1 disabled");
   }
   /*************************************/
 }
@@ -291,23 +308,23 @@ void setChan1State(bool state) {
 void setChan2State(bool state) {
 
   // Return if we're already in that state
-  if (chan2_enabled == state) {
-    serial_println("Chan2 no change");
+  if (channel2State == state) {
+    serial_println("Channel 2 no change");
     return;
   }
 
-  chan2_enabled = state;
+  channel2State = state;
 
-  setChannelState(DAC_CHAN2_V, chan2_enabled);
+  setChannelState(DAC_CHAN2_V, channel2State);
 
-  digitalWrite(OUT_VMINUS, chan2_enabled);
-  expander.digitalWrite(PORT_B, LED_VMINUS_EN, chan2_enabled);
+  digitalWrite(OUT_VMINUS, channel2State);
+  expander.digitalWrite(PORT_B, LED_VMINUS_EN, channel2State);
 
   /*************** DEBUG ***************/
-  if (chan2_enabled) {
-    serial_println("Chan2 enabled");
+  if (channel2State) {
+    serial_println("Channel 2 enabled");
   } else {
-    serial_println("Chan2 disabled");
+    serial_println("Channel 2 disabled");
   }
   /*************************************/
 }

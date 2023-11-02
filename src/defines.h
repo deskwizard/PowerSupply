@@ -45,17 +45,23 @@
 #define MODE_CV 0
 #define MODE_CC 1
 
-void timer_init();
+// From timer.cpp
+void initTimer();
 
-void bt_init();
+// from bluetooth.cpp
+void initBT();
 void startBT();
 
-void ota_init();
+// From OTA.cpp
+void initOTA();
 void handleOTA();
 
+// From inputs_MCP.cpp
 void handleExpanderInputs();
-void expander_init();
+void initExpander();
 
+
+// From serial_helpers.cpp
 void handleSerial();
 void handleBT_Serial();
 
@@ -72,7 +78,7 @@ void printChan2V();
 void printChan2I();
 void printDebugPrefixLCD(const char *data);
 
-// **** TESTING ****
+// **** TESTING ( in main.cpp) ****
 void runSelfTest();
 void blinking();
 void scanI2C();

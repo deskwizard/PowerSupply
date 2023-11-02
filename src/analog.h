@@ -10,8 +10,13 @@
 #define DAC_CHAN2_V 4
 #define DAC_CHAN2_I 6
 
-void setChannelState(uint8_t channel, bool state);
+void testAnalog();
 
+/****************************************************************/
+/*                             DAC                              */
+/****************************************************************/
+void initDAC();
+void setChannelState(uint8_t channel, bool state);
 void setChan1V();
 void setChan1V(uint16_t code);
 void setChan1I();
@@ -20,5 +25,15 @@ void setChan2V();
 void setChan2V(uint16_t code);
 void setChan2I();
 void setChan2I(uint16_t code);
+
+
+/****************************************************************/
+/*                             ADC                              */
+/****************************************************************/
+
+void initADC();
+
+//debug
+void handleAnalog();
 
 #endif

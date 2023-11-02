@@ -1,4 +1,6 @@
 #include "analog.h"
+#include "control.h"
+#include <ADS7828.h>
 #include <DAC7678.h>
 
 DAC7678 dac(DAC_ADDR);
@@ -9,6 +11,11 @@ int16_t chan1Icode = -1; // ----------- WTF?? -----------
 int16_t chan2Vcode = 500;
 int16_t chan2Icode = 0;
 
+#define ADC_READ_AVG 10
+ADS7828 adc(ADC_ADDR);
+int16_t chan1VRead;
+int16_t chan1IRead;
+
 void setChannelState(uint8_t channel, bool state) {
   dac.setChannelState(channel, state);
 }
@@ -16,7 +23,7 @@ void setChannelState(uint8_t channel, bool state) {
 /****************************************************************/
 /*                             DAC                              */
 /****************************************************************/
-void dac_init() {
+void initDAC() {
 
   dac.begin(EXT); // Vref provided by ADC
   dac.reset();
@@ -85,7 +92,56 @@ void setChan2I(uint16_t code) {
   printChan2I();
 }
 
-// Debug
+/****************************************************************/
+/*                             ADC                              */
+/****************************************************************/
+
+void initADC() { adc.begin(INT); }
+
+void handleAnalog() {
+    uint32_t currentMillis = millis();
+  static uint32_t previousMillis = 0;
+
+  if (((uint32_t)(currentMillis - previousMillis) >= 1) && getChannel1State()) {
+
+    static uint8_t readIndex = 0;
+
+    static uint16_t readingsV[ADC_READ_AVG] = {0};
+    static uint32_t totalV = 0;
+
+    static uint16_t readingsI[ADC_READ_AVG] = {0};
+    static uint32_t totalI = 0;
+
+    // subtract the last reading:
+    totalV = totalV - readingsV[readIndex];
+    totalI = totalI - readingsI[readIndex];
+    // read from the sensor:
+    //    readings[readIndex] = adc.read(0, SD);
+    readingsV[readIndex] = adc.read(0, DF);
+    readingsI[readIndex] = adc.read(2, DF);
+    // add the reading to the total:
+    totalV = totalV + readingsV[readIndex];
+    totalI = totalI + readingsI[readIndex];
+    // advance to the next position in the array:
+    readIndex = readIndex + 1;
+
+    // End of the array, wrap around
+    if (readIndex >= ADC_READ_AVG) {
+      readIndex = 0;
+    }
+
+    // calculate the average:
+    chan1VRead = totalV / ADC_READ_AVG;
+    chan1IRead = totalI / ADC_READ_AVG;
+
+    previousMillis = currentMillis;
+  }
+}
+
+/****************************************************************/
+/*                            DEBUG                             */
+/****************************************************************/
+
 void writeDAC() {
 
   dac.enable();
@@ -102,4 +158,40 @@ void writeDAC() {
 
   Serial.print("DAC: ");
   Serial.println(dacValue);
+}
+
+void readADC() {
+
+  uint16_t read_value = 0;
+  float voltage = 0;
+
+  // for (int x = 0; x <= 7; x++) {
+  for (int x = 0; x <= 1; x++) {
+
+    read_value = adc.read(x, SD);
+    voltage = read_value * (2500.0 / 4096.0);
+
+    Serial.print("Channel ");
+    Serial.print(x);
+    Serial.print(": ");
+    Serial.print(read_value);
+    Serial.print(" (");
+    Serial.print(voltage, 0);
+    Serial.println(" mV)");
+  }
+
+  Serial.println();
+}
+
+void testAnalog() {
+
+  uint32_t currentMillis = millis();  // Get snapshot of time
+  static uint32_t previousMillis = 0; // Tracks the time since last event fired
+  static bool ledState;
+
+  if ((uint32_t)(currentMillis - previousMillis) >= 500) {
+    writeDAC();
+    readADC();
+    previousMillis = currentMillis;
+  }
 }

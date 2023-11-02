@@ -40,7 +40,7 @@ void callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param) {
   }
 }
 
-void bt_init() {
+void initBT() {
 
   pinMode(BT_LED, OUTPUT);
   digitalWrite(BT_LED, LOW);

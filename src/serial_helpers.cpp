@@ -1,7 +1,7 @@
+#include "analog.h"
 #include "control.h"
 #include "defines.h"
 #include "externs.h"
-#include "analog.h"
 /*
 
   TODO:
@@ -55,7 +55,7 @@ void handleSerial() {
 
       setChan1State(true);
 
-      if (tracking) {
+      if (getTrackingMode()) {
         setChan2State(true);
         displayCh2State();
       }
@@ -66,7 +66,7 @@ void handleSerial() {
     case 'a':
       setChan1State(false);
 
-      if (tracking) {
+      if (getTrackingMode()) {
         setChan2State(false);
         displayCh2State();
       }
@@ -75,7 +75,7 @@ void handleSerial() {
       break;
 
     case 'b':
-      if (!tracking && railSetting == DUAL) {
+      if (!getTrackingMode() && getRailSetting() == DUAL) {
         setChan2State(false);
         displayCh2State();
       } else {
@@ -84,7 +84,7 @@ void handleSerial() {
       break;
 
     case 'B':
-      if (!tracking && railSetting == DUAL) {
+      if (!getTrackingMode() && getRailSetting() == DUAL) {
         setChan2State(true);
         displayCh2State();
       } else {
@@ -111,11 +111,11 @@ void handleSerial() {
       break;
 
     case 'r':
-      //toggleRail();
+      // toggleRail();
       break;
 
     case 'm':
-      toggleMode();
+      toggleOutputMode();
       break;
 
     case 's':
@@ -127,17 +127,16 @@ void handleSerial() {
 
       setChan1V(test_code);
 
-      if (tracking) {
+      if (getTrackingMode()) {
         setChan2V(test_code);
         displayUpdateChan2V();
       }
 
       displayUpdateChan1V();
-
       break;
 
     case 'n':
-      if (tracking || (railSetting == SINGLE)) {
+      if (getTrackingMode() || (getRailSetting() == SINGLE)) {
         break;
       }
 
@@ -432,7 +431,8 @@ void serial_println() {
 
 void printChan1V() {
 
-  uint16_t outputValue = (VREF_MV / 4096) * (chan1Vcode - CHAN1V_OFFSET) * OUT_GAIN;
+  uint16_t outputValue =
+      (VREF_MV / 4096) * (chan1Vcode - CHAN1V_OFFSET) * OUT_GAIN;
 
   serial_print(" Chan1V - code: ");
   serial_print(chan1Vcode);
@@ -451,7 +451,8 @@ void printChan1V() {
 
 void printChan2V() {
 
-uint16_t outputValue = (VREF_MV / 4096) * (chan2Vcode - CHAN2V_OFFSET) * OUT_GAIN;
+  uint16_t outputValue =
+      (VREF_MV / 4096) * (chan2Vcode - CHAN2V_OFFSET) * OUT_GAIN;
 
   serial_print("Chan2V - code: ");
   serial_print(chan2Vcode);

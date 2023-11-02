@@ -1,4 +1,5 @@
 #include "LCD_defs.h"
+#include "control.h"
 
 Adafruit_ILI9341 lcd = Adafruit_ILI9341(LCD_CS, LCD_DC, LCD_RST);
 
@@ -61,19 +62,19 @@ void displayCh1State() {
 
   /******************************************************************************/
 
-  if (chan1_enabled) {
-    if (tracking) {
+  if (getChannel1State()) {
+    if (getTrackingMode()) {
       lcd.setTextColor(COLOR_TRACK_ON);
-    } else if (railSetting) {
+    } else if (getRailSetting()) {
       lcd.setTextColor(COLOR_HR_ON);
     } else {
       lcd.setTextColor(COLOR_CHAN1_ON);
     }
     lcd.print("ON");
   } else {
-    if (tracking) {
+    if (getTrackingMode()) {
       lcd.setTextColor(COLOR_TRACK_OFF);
-    } else if (railSetting) {
+    } else if (getRailSetting()) {
       lcd.setTextColor(COLOR_HR_OFF);
     } else {
       lcd.setTextColor(COLOR_CHAN1_OFF);
@@ -92,7 +93,7 @@ void displayCh2State() {
   // maybe not the best place for this check, works for now
   // stops the rail switch from triggering printing the numbers
   // before drawing the borders (and again over it)
-  if (railSetting == SINGLE) {
+  if (getRailSetting() == SINGLE) {
     return;
   }
 
@@ -102,17 +103,17 @@ void displayCh2State() {
   lcd.setFont(&FreeSansBold12pt7b);
   lcd.setTextSize(0);
 
-  if (chan2_enabled) {
-    if (tracking) {
+  if (getChannel2State()) {
+    if (getTrackingMode()) {
       lcd.setTextColor(COLOR_TRACK_ON);
-    } else if (!railSetting) {
+    } else if (!getRailSetting()) {
       lcd.setTextColor(COLOR_CHAN2_ON);
     }
     lcd.print("ON");
   } else {
-    if (tracking) {
+    if (getTrackingMode()) {
       lcd.setTextColor(COLOR_TRACK_OFF);
-    } else if (!railSetting) {
+    } else if (!getRailSetting()) {
       lcd.setTextColor(COLOR_CHAN2_OFF);
     }
     lcd.print("OFF");
@@ -131,7 +132,7 @@ void displayTracking() {
   // Smallest possible rectangle to erase
   lcd.fillRect(60, 150, 105, 25, ZONE_COLOR);
 
-  if (tracking) {
+  if (getTrackingMode()) {
 
     // Just show the tracking indicator if we are tracking
     lcd.setTextColor(ILI9341_WHITE);
@@ -163,7 +164,7 @@ void displayRange() {
   // Smallest possible rectangle to erase
   lcd.fillRect(60, 150, 105, 25, ZONE_COLOR);
 
-  if (railSetting == SINGLE) {
+  if (getRailSetting() == SINGLE) {
     /*
         lcd.fillTriangle(20, 170, 35, 148, 50, 170, ILI9341_YELLOW);
         lcd.fillTriangle(195, 170, 210, 148, 225, 170, ILI9341_YELLOW);
@@ -192,7 +193,7 @@ void displayRange() {
   displaySelector1();
   displayCh1State();
 
-  if (railSetting == DUAL) {
+  if (getRailSetting() == DUAL) {
     displaySelector2();
     displayCh2State();
   }
@@ -203,7 +204,7 @@ void redrawChan1Borders() {}
 
 void drawBorders() {
 
-  if (railSetting) {
+  if (getRailSetting()) {
     lcd.fillScreen(ILI9341_BLACK);
 
     lcd.fillRoundRect(0, 0, X_RES, BORDERS_H, ROUNDYNESS, COLOR_HR_OFF);
@@ -216,7 +217,7 @@ void drawBorders() {
                       X_RES - (2 * BORDER_SIZE), BORDERS_H - (2 * BORDER_SIZE),
                       ROUNDYNESS, ILI9341_BLACK);
 
-  } else if (tracking) {
+  } else if (getTrackingMode()) {
     uint16_t color = COLOR_TRACK_OFF;
 
     // One color fill + 1 smaller black fill  = border
@@ -255,18 +256,18 @@ void displayHeaders1() {
   lcd.setFont(&FreeSansBold12pt7b);
   lcd.setTextSize(0);
 
-  if (chan1_enabled) {
-    if (tracking) {
+  if (getChannel1State()) {
+    if (getTrackingMode()) {
       lcd.setTextColor(COLOR_TRACK_ON);
-    } else if (railSetting) {
+    } else if (getRailSetting()) {
       lcd.setTextColor(COLOR_HR_ON);
     } else {
       lcd.setTextColor(COLOR_CHAN1_ON);
     }
   } else {
-    if (tracking) {
+    if (getTrackingMode()) {
       lcd.setTextColor(COLOR_TRACK_OFF);
-    } else if (railSetting) {
+    } else if (getRailSetting()) {
       lcd.setTextColor(COLOR_HR_OFF);
     } else {
       lcd.setTextColor(COLOR_CHAN1_OFF);
@@ -281,7 +282,7 @@ void displayHeaders1() {
 
 void displayHeaders2() {
 
-  if (railSetting) {
+  if (getRailSetting()) {
     lcd.setTextColor(ILI9341_DARKGREY);
 
     lcd.setFont(&FreeSansBold18pt7b);
@@ -293,18 +294,18 @@ void displayHeaders2() {
 
     displayUnits2();
 
-    if (chan2_enabled) {
-      if (tracking) {
+    if (getChannel2State()) {
+      if (getTrackingMode()) {
         lcd.setTextColor(COLOR_TRACK_ON);
-      } else if (railSetting) {
+      } else if (getRailSetting()) {
         lcd.setTextColor(COLOR_HR_ON);
       } else {
         lcd.setTextColor(COLOR_CHAN2_ON);
       }
     } else {
-      if (tracking) {
+      if (getTrackingMode()) {
         lcd.setTextColor(COLOR_TRACK_OFF);
-      } else if (railSetting) {
+      } else if (getRailSetting()) {
         lcd.setTextColor(COLOR_HR_OFF);
       } else {
         lcd.setTextColor(COLOR_CHAN2_OFF);
@@ -323,7 +324,7 @@ void displayUnits1() {
   lcd.setFont(&FreeSansBold24pt7b);
   lcd.setTextSize(BIG_FONT);
 
-  if (chan1_enabled) {
+  if (getChannel1State()) {
     lcd.setTextColor(ILI9341_GREEN);
   } else {
     lcd.setTextColor(ILI9341_DARKGREEN);
@@ -341,7 +342,7 @@ void displayUnits2() {
   lcd.setFont(&FreeSansBold24pt7b);
   lcd.setTextSize(BIG_FONT);
 
-  if (chan2_enabled) {
+  if (getChannel2State()) {
     lcd.setTextColor(ILI9341_GREEN);
   } else {
     lcd.setTextColor(ILI9341_DARKGREEN);
@@ -364,13 +365,13 @@ void displayUpdateChan1V() {
   //     (VREF_MV / 4096) * (chan1Vcode - CHAN1V_OFFSET) * OUT_GAIN;
 
   /*
-    if (railSetting == SINGLE) { // Our gain is 10x on single rail instead of
+    if (getRailSetting() == SINGLE) { // Our gain is 10x on single rail instead of
     5x,
                                  // so double the value
       outputValue = outputValue * 2;
     }
   */
-  if (modeSetting == MODE_CV) {
+  if (getOutputMode() == MODE_CV) {
     canvasChan1V.setFont(&FreeSansBold24pt7b);
   } else {
     canvasChan1V.setFont(&FreeSans24pt7b);
@@ -379,7 +380,7 @@ void displayUpdateChan1V() {
   canvasChan1V.fillScreen(ILI9341_BLACK);
   canvasChan1V.setCursor(0, 38);
 
-  if (chan1_enabled) {
+  if (getChannel1State()) {
     foreground = ILI9341_GREEN;
     // outputValue = chan1VRead;
     outputValue = (VREF_MV / 4096) * chan1VRead * OUT_GAIN;
@@ -404,7 +405,7 @@ void displayUpdateChan1I() {
 
   canvasChan1I.fillScreen(ILI9341_BLACK);
 
-  if (modeSetting == MODE_CC) {
+  if (getOutputMode() == MODE_CC) {
     canvasChan1I.setFont(&FreeSansBold24pt7b);
   } else {
     canvasChan1I.setFont(&FreeSans24pt7b);
@@ -422,11 +423,11 @@ void displayUpdateChan1I() {
       // TODO wipe indicator, show on 0 crossing upwards
     }
   */
-  if (errorFlagChan1 == true) {
+  if (getChannel1ErrorFlag() == true) {
     foreground = ILI9341_RED;
     canvasChan1I.setFont(&FreeSansBold18pt7b);
     canvasChan1I.print("LIMIT");
-  } else if (chan1_enabled) {
+  } else if (getChannel1State()) {
     foreground = ILI9341_GREEN;
     canvasChan1I.print(float(chan1IRead / 1000.0), 3);
   } else {
@@ -464,11 +465,11 @@ void displayUpdateChan2V() {
   uint16_t outputValue =
       (VREF_MV / 4096) * (chan2Vcode - CHAN2V_OFFSET) * OUT_GAIN;
 
-  if (chan2_enabled) {
+  if (getChannel2State()) {
     foreground = ILI9341_GREEN;
   }
 
-  if (modeSetting == MODE_CV) {
+  if (getOutputMode() == MODE_CV) {
     canvasChan2V.setFont(&FreeSansBold24pt7b);
   } else {
     canvasChan2V.setFont(&FreeSans24pt7b);
@@ -496,7 +497,7 @@ void displayUpdateChan2I() {
 
   canvasChan2I.fillScreen(ILI9341_BLACK);
 
-  if (modeSetting == MODE_CC) {
+  if (getOutputMode() == MODE_CC) {
     canvasChan2I.setFont(&FreeSansBold24pt7b);
   } else {
     canvasChan2I.setFont(&FreeSans24pt7b);
@@ -511,7 +512,7 @@ void displayUpdateChan2I() {
   // Always show the code for now
   canvasChan2I.print(float(chan2Icode / 1000.0), 3);
 
-  if (chan2_enabled) {
+  if (getChannel2State()) {
     foreground = ILI9341_GREEN;
   }
 
@@ -540,7 +541,7 @@ void displaySelector1() {
   uint16_t h_origin = 152;
   uint8_t length = 24;
 
-  if (modeSetting == MODE_CC) {
+  if (getOutputMode() == MODE_CC) {
     if (v_origin == V1_ROW + 5) { // Wipe the previous indicator
       lcd.fillRect(60, v_origin, 120, 5, ZONE_COLOR);
     }
@@ -558,7 +559,7 @@ void displaySelector1() {
   if (stepSizeEnc1 == 100) {
     h_origin = 62;
     length = 50;
-    if (modeSetting == MODE_CC) {
+    if (getOutputMode() == MODE_CC) {
       length = 60;
     }
 
@@ -577,7 +578,7 @@ void displaySelector2() {
   uint16_t h_origin = 148;
   uint8_t length = 24;
 
-  if (modeSetting == MODE_CC) {
+  if (getOutputMode() == MODE_CC) {
     if (v_origin == V2_ROW + 5) { // Wipe the previous indicator
       lcd.fillRect(56, v_origin, 120, 5, ZONE_COLOR);
     }
@@ -595,7 +596,7 @@ void displaySelector2() {
   if (stepSizeEnc2 == 100) {
     h_origin = 58;
     length = 50;
-    if (modeSetting == MODE_CC) {
+    if (getOutputMode() == MODE_CC) {
       length = 60;
     }
 
@@ -621,7 +622,7 @@ void displayMode() {
   // lcd.setCursor(70, 168);
   lcd.setCursor(190, 168);
 
-  if (modeSetting == MODE_CV) {
+  if (getOutputMode() == MODE_CV) {
     lcd.setTextColor(ILI9341_PINK);
     lcd.print(" V");
   } else {

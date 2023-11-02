@@ -1,16 +1,7 @@
 extern MCP23017 expander;
 
-
 extern BluetoothSerial BT_Serial;
 extern bool waitForBT;
-
-extern bool chan1_enabled;
-extern bool chan2_enabled;
-extern bool errorFlagChan1;
-extern bool errorFlagChan2;
-extern bool tracking;
-extern bool railSetting;
-extern bool modeSetting;
 
 extern int16_t chan1VRead;
 extern int16_t chan1IRead;

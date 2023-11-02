@@ -22,21 +22,7 @@ void IRAM_ATTR onTimer() { // Needs to be before setup()
   portEXIT_CRITICAL_ISR(&timerMux);
 }
 
-
-
-// void input_init() {
-//
-//  encoder_init();
-//  expander_init();
-//
-//  delay(100);     // Wait a bit for things to stabilize
-//
-//  // Now that all the IO is taken care of, configure and start the timer
-//  timer_init();
-//
-//}
-
-void timer_init() {
+void initTimer() {
 
   // Setup and start timer interrupt
   timer = timerBegin(0, 80, true);

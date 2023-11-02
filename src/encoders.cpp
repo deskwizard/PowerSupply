@@ -21,7 +21,7 @@ uint16_t stepSizeEnc2 = 1;
 volatile uint8_t currentKeyState = 0; // debounced state
 volatile uint8_t key_state;           // bit x = 1: key has changed state
 
-void encoder_init() {
+void initEncoders() {
 
   pinMode(ENC1_A_PIN, INPUT_PULLUP);
   pinMode(ENC1_B_PIN, INPUT_PULLUP);
@@ -84,7 +84,7 @@ void handleEncoders() {
       direction = UP;
     }
 
-    if (modeSetting == MODE_CV) {
+    if (getOutputMode() == MODE_CV) {
       changeChan1V(direction);
     } else {
       changeChan1I(direction);
@@ -98,7 +98,7 @@ void handleEncoders() {
 
     direction = DOWN;
 
-    if (railSetting == SINGLE) {
+    if (getRailSetting() == SINGLE) {
       serial_println("Single rail; Input ignored");
       lastEnc2Pos = currentEnc2Pos;
       return;
@@ -114,7 +114,7 @@ void handleEncoders() {
       direction = UP;
     }
 
-    if (modeSetting == MODE_CV) {
+    if (getOutputMode() == MODE_CV) {
       changeChan2V(direction);
     } else {
       changeChan2I(direction);
@@ -123,11 +123,11 @@ void handleEncoders() {
   }
 }
 
-/************************************************************                                                     
- *                     Encoder switches                     *                                                       
+/************************************************************
+ *                     Encoder switches                     *
  ************************************************************/
 
-void keys_init() {
+void initKeys() {
 
   // Pins defaults to inputs, so we only need to set the pullups here
   pinMode(ENC1_BTN_PIN, INPUT_PULLUP);
@@ -218,7 +218,7 @@ void handleKeys() {
           stepSizeEnc1 = 1;
         }
 
-        if (tracking) {
+        if (getTrackingMode()) {
           stepSizeEnc2 = stepSizeEnc1;
           displaySelector2();
         }
@@ -237,7 +237,7 @@ void handleKeys() {
     if (bitRead(key_state, 1)) { // Key "register" bit 0 (Encoder 2)
       serial_print("ENC2_KEY - ");
 
-      if (railSetting == true) {
+      if (getRailSetting() == SINGLE) {
         serial_println("err - rail, return");
         key_state = 0;
         return;
@@ -256,7 +256,7 @@ void handleKeys() {
           stepSizeEnc2 = 1;
         }
 
-        if (tracking) {
+        if (getTrackingMode()) {
           stepSizeEnc1 = stepSizeEnc2;
           displaySelector1();
         }

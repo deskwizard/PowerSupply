@@ -14,7 +14,7 @@
 
 void handleOTA() { ArduinoOTA.handle(); }
 
-void ota_init() {
+void initOTA() {
 
   displayOTASetup();
 
@@ -101,7 +101,7 @@ void ota_init() {
 }
 #else
 
-void ota_init() { return; }
+void initOTA() { return; }
 
 void handleOTA() { return; }
 
