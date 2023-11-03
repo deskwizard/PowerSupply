@@ -1,6 +1,7 @@
 #include "defines.h"
 #include "encoders.h"
 #include "externs.h"
+#include "expander.h"
 
 hw_timer_t *timer = NULL;
 portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
@@ -17,8 +18,8 @@ void IRAM_ATTR onTimer() { // Needs to be before setup()
   getEncSwitches();
 
   // Check for interrupt signal from MCP23017
-  ExpanderIntFlag = !digitalRead(IN_MCP_INT);
-
+  // ExpanderIntFlag = !digitalRead(IN_MCP_INT);
+  setInterruptFlag(!digitalRead(IN_MCP_INT));
   portEXIT_CRITICAL_ISR(&timerMux);
 }
 

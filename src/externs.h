@@ -12,6 +12,4 @@ extern int16_t chan2Icode;
 extern uint16_t stepSizeEnc1;
 extern uint16_t stepSizeEnc2;
 
-extern volatile bool ExpanderIntFlag;
-
 #endif

@@ -4,7 +4,7 @@
 
 MCP23017 expander(MCP_ADDR);
 
-volatile bool ExpanderIntFlag = false;
+bool ExpanderIntFlag = false;
 
 void initExpander() {
 
@@ -44,6 +44,8 @@ void initExpander() {
   expander.portMode(PORT_B, OUTPUT);
 
 }
+
+void IRAM_ATTR setInterruptFlag(bool value) {ExpanderIntFlag = value;}
 
 /************************************************************
  *                         Outputs                          *

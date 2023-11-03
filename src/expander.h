@@ -6,6 +6,8 @@
 
 void initExpander();
 
+void IRAM_ATTR setInterruptFlag(bool value);
+
 void setTrackingLED(bool state);
 void setChannel1StateLED(bool state);
 void setChannel2StateLED(bool state);
