@@ -1,12 +1,13 @@
 #include "display.h"
 #include "control.h"
+#include "analog.h"
 
 Adafruit_ILI9341 lcd = Adafruit_ILI9341(LCD_CS, LCD_DC, LCD_RST);
 
 GFXcanvas1 canvasChan1V(115, 40); // 115x40 pixel canvas
 GFXcanvas1 canvasChan1I(115, 40); // 115x40 pixel canvas
-GFXcanvas1 canvasChan2V(132, 40); // 115x40 pixel canvas
-GFXcanvas1 canvasChan2I(132, 40); // 115x40 pixel canvas
+GFXcanvas1 canvasChan2V(132, 40); // 132x40 pixel canvas
+GFXcanvas1 canvasChan2I(132, 40); // 132x40 pixel canvas
 
 // I'm going to have to rework this because colors are a mess now...
 // const uint32_t colors[3][3] = {
@@ -15,10 +16,6 @@ GFXcanvas1 canvasChan2I(132, 40); // 115x40 pixel canvas
 //  (tracking/not tracking) {COLOR_CHAN2, COLOR_TRACK, ILI9341_DARKGREY} //
 //  Channel 1 colors (tracking/not tracking)
 //};
-
-// lcd debug
-float fakeReading1I = 0.0;
-float fakeReading2I = 0.0;
 
 void lcdInit0() {
 
@@ -383,7 +380,7 @@ void displayUpdateChan1V() {
   if (getChannel1State()) {
     foreground = ILI9341_GREEN;
     // outputValue = chan1VRead;
-    outputValue = (VREF_MV / 4096) * chan1VRead * OUT_GAIN;
+    outputValue = (VREF_MV / 4096) * getChannel1Voltage() * OUT_GAIN;
     // canvasChan1V.print(float(outputValue / 1000.0), 2);
   } else {
     outputValue = (VREF_MV / 4096) * (chan1Vcode - CHAN1V_OFFSET) * OUT_GAIN;
@@ -429,7 +426,7 @@ void displayUpdateChan1I() {
     canvasChan1I.print("LIMIT");
   } else if (getChannel1State()) {
     foreground = ILI9341_GREEN;
-    canvasChan1I.print(float(chan1IRead / 1000.0), 3);
+    canvasChan1I.print(float(getChannel1Current() / 1000.0), 3);
   } else {
     if (chan1Icode >= 0) {
       canvasChan1I.print(float(chan1Icode / 1000.0), 3);

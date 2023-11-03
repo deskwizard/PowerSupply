@@ -9,13 +9,21 @@ DAC7678 dac(DAC_ADDR);
 // Needs to be signed for encoder step size things...
 int16_t chan1Vcode = 500;
 int16_t chan1Icode = -1; // ----------- WTF?? -----------
-int16_t chan1VRead;
-int16_t chan1IRead;
+// int16_t chan1VRead;
+// int16_t chan1IRead;
 
 int16_t chan2Vcode = 500;
 int16_t chan2Icode = 0;
 // int16_t chan2VRead;
 // int16_t chan2IRead;
+
+// Let's somewhat do it right
+
+// Running totals
+uint32_t totalChan1V = 0;
+uint32_t totalChan1I = 0;
+uint32_t totalChan2V = 0;
+uint32_t totalChan2I = 0;
 
 /****************************************************************/
 /*                             DAC                              */
@@ -91,36 +99,43 @@ void handleAnalog() {
 
     static uint16_t readingsChan1V[ADC_READ_AVG] = {0};
     static uint16_t readingsChan1I[ADC_READ_AVG] = {0};
-    static uint32_t totalChan1V = 0;
-    static uint32_t totalChan1I = 0;
+    static uint16_t readingsChan2V[ADC_READ_AVG] = {0};
+    static uint16_t readingsChan2I[ADC_READ_AVG] = {0};
 
-    // Subtract the last readingsChan1
+    // Subtract the last readings
     totalChan1V = totalChan1V - readingsChan1V[readIndex];
     totalChan1I = totalChan1I - readingsChan1I[readIndex];
+    totalChan2V = totalChan2V - readingsChan2V[readIndex];
+    totalChan2I = totalChan2I - readingsChan2I[readIndex];
 
     // Read ADC channels
     readingsChan1V[readIndex] = adc.read(ADC_CHAN1_V, SD);
     readingsChan1I[readIndex] = adc.read(ADC_CHAN1_I, SD);
+    readingsChan2V[readIndex] = adc.read(ADC_CHAN2_V, SD);
+    readingsChan2I[readIndex] = adc.read(ADC_CHAN2_I, SD);
 
-    // Add reading to the totalChan1:
+    // Add readings to the total
     totalChan1V = totalChan1V + readingsChan1V[readIndex];
     totalChan1I = totalChan1I + readingsChan1I[readIndex];
+    totalChan2V = totalChan2V + readingsChan2V[readIndex];
+    totalChan2I = totalChan2I + readingsChan2I[readIndex];
 
     // Advance to the next position in the array:
     readIndex = readIndex + 1;
 
-    // End of the array, wrap around
+    // End of the array reached, wrap around
     if (readIndex >= ADC_READ_AVG) {
       readIndex = 0;
     }
 
-    // calculate the average:
-    chan1VRead = totalChan1V / ADC_READ_AVG;
-    chan1IRead = totalChan1I / ADC_READ_AVG;
-
     previousMillis = currentMillis;
   }
 }
+
+uint16_t getChannel1Voltage() { return totalChan1V / ADC_READ_AVG; }
+uint16_t getChannel1Current() { return totalChan1I / ADC_READ_AVG; }
+uint16_t getChannel2Voltage() { return totalChan2V / ADC_READ_AVG; }
+uint16_t getChannel2Current() { return totalChan2I / ADC_READ_AVG; }
 
 /****************************************************************/
 /*                            DEBUG                             */

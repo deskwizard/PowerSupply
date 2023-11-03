@@ -4,9 +4,6 @@
 extern BluetoothSerial BT_Serial;
 extern bool waitForBT;
 
-extern int16_t chan1VRead;
-extern int16_t chan1IRead;
-
 extern int16_t chan1Vcode;
 extern int16_t chan1Icode;
 extern int16_t chan2Vcode;

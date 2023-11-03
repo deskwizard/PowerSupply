@@ -37,6 +37,11 @@ void setChan2I(uint16_t code);
 
 void initADC();
 
+uint16_t getChannel1Voltage();
+uint16_t getChannel1Current();
+uint16_t getChannel2Voltage();
+uint16_t getChannel2Current();
+
 //debug
 void handleAnalog();
 
