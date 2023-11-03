@@ -14,8 +14,8 @@ int16_t chan1IRead;
 
 int16_t chan2Vcode = 500;
 int16_t chan2Icode = 0;
-// int16_t chan1VRead;
-// int16_t chan1IRead;
+// int16_t chan2VRead;
+// int16_t chan2IRead;
 
 /****************************************************************/
 /*                             DAC                              */
@@ -89,23 +89,22 @@ void handleAnalog() {
 
     static uint8_t readIndex = 0;
 
-    static uint16_t readingsV[ADC_READ_AVG] = {0};
-    static uint32_t totalV = 0;
+    static uint16_t readingsChan1V[ADC_READ_AVG] = {0};
+    static uint16_t readingsChan1I[ADC_READ_AVG] = {0};
+    static uint32_t totalChan1V = 0;
+    static uint32_t totalChan1I = 0;
 
-    static uint16_t readingsI[ADC_READ_AVG] = {0};
-    static uint32_t totalI = 0;
-
-    // Subtract the last readings
-    totalV = totalV - readingsV[readIndex];
-    totalI = totalI - readingsI[readIndex];
+    // Subtract the last readingsChan1
+    totalChan1V = totalChan1V - readingsChan1V[readIndex];
+    totalChan1I = totalChan1I - readingsChan1I[readIndex];
 
     // Read ADC channels
-    readingsV[readIndex] = adc.read(ADC_CHAN1_V, SD);
-    readingsI[readIndex] = adc.read(ADC_CHAN1_I, SD);
+    readingsChan1V[readIndex] = adc.read(ADC_CHAN1_V, SD);
+    readingsChan1I[readIndex] = adc.read(ADC_CHAN1_I, SD);
 
-    // Add reading to the total:
-    totalV = totalV + readingsV[readIndex];
-    totalI = totalI + readingsI[readIndex];
+    // Add reading to the totalChan1:
+    totalChan1V = totalChan1V + readingsChan1V[readIndex];
+    totalChan1I = totalChan1I + readingsChan1I[readIndex];
 
     // Advance to the next position in the array:
     readIndex = readIndex + 1;
@@ -116,8 +115,8 @@ void handleAnalog() {
     }
 
     // calculate the average:
-    chan1VRead = totalV / ADC_READ_AVG;
-    chan1IRead = totalI / ADC_READ_AVG;
+    chan1VRead = totalChan1V / ADC_READ_AVG;
+    chan1IRead = totalChan1I / ADC_READ_AVG;
 
     previousMillis = currentMillis;
   }
