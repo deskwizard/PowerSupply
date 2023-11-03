@@ -54,11 +54,11 @@ void changeChan1I(bool direction) {
     }
   }
 
-  setChan1I();
+  setChan1I(chan1Icode);
 
   if (trackingMode) {
     chan2Icode = chan1Icode;
-    setChan2I();
+    setChan2I(chan2Icode);
     displayUpdateChan2I();
   }
 
@@ -82,11 +82,11 @@ void changeChan2I(bool direction) {
     }
   }
 
-  setChan2I();
+  setChan2I(chan2Icode);
 
   if (trackingMode) {
     chan1Icode = chan2Icode;
-    setChan1I();
+    setChan1I(chan1Icode);
     displayUpdateChan1I();
   }
 
@@ -108,11 +108,11 @@ void changeChan1V(bool direction) {
     }
   }
 
-  setChan1V();
+  setChan1V(chan1Vcode);
 
   if (trackingMode) {
     chan2Vcode = chan1Vcode;
-    setChan2V();
+    setChan2V(chan2Vcode);
     displayUpdateChan2V();
   }
 
@@ -135,11 +135,11 @@ void changeChan2V(bool direction) {
     }
   }
 
-  setChan2V();
+  setChan2V(chan2Vcode);
 
   if (trackingMode) {
     chan1Vcode = chan2Vcode;
-    setChan1V();
+    setChan1V(chan1Vcode);
     displayUpdateChan1V();
   }
 

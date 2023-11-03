@@ -12,18 +12,19 @@ int16_t chan1Icode = -1; // ----------- WTF?? -----------
 int16_t chan1VRead;
 int16_t chan1IRead;
 
-int16_t chan2Vcode = 250;
+int16_t chan2Vcode = 500;
 int16_t chan2Icode = 0;
 // int16_t chan1VRead;
 // int16_t chan1IRead;
+
+/****************************************************************/
+/*                             DAC                              */
+/****************************************************************/
 
 void setChannelState(uint8_t channel, bool state) {
   dac.setChannelState(channel, state);
 }
 
-/****************************************************************/
-/*                             DAC                              */
-/****************************************************************/
 void initDAC() {
 
   dac.begin(EXT); // Vref provided by ADC
@@ -49,20 +50,10 @@ void initDAC() {
   //---------------------------------------------------------
 }
 
-void setChan1V() {
-  dac.set(DAC_CHAN1_V, chan1Vcode);
-  printChan1V();
-}
-
 void setChan1V(uint16_t code) {
   chan1Vcode = code;
   dac.set(DAC_CHAN1_V, chan1Vcode);
   printChan1V();
-}
-
-void setChan1I() {
-  dac.set(DAC_CHAN1_I, chan1Icode);
-  printChan1I();
 }
 
 void setChan1I(uint16_t code) {
@@ -71,20 +62,10 @@ void setChan1I(uint16_t code) {
   printChan1I();
 }
 
-void setChan2V() {
-  dac.set(DAC_CHAN2_V, chan2Vcode);
-  printChan2V();
-}
-
 void setChan2V(uint16_t code) {
   chan2Vcode = code;
   dac.set(DAC_CHAN2_V, chan2Vcode);
   printChan2V();
-}
-
-void setChan2I() {
-  dac.set(DAC_CHAN2_I, chan2Icode);
-  printChan2I();
 }
 
 void setChan2I(uint16_t code) {
