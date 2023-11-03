@@ -1,3 +1,6 @@
+#ifndef _EXTERNS_H_
+#define _EXTERNS_H_
+
 extern MCP23017 expander;
 
 extern BluetoothSerial BT_Serial;
@@ -17,3 +20,5 @@ extern volatile uint8_t currentEnc2Pos;
 extern uint16_t stepSizeEnc2;
 
 extern volatile bool ExpanderIntFlag;
+
+#endif

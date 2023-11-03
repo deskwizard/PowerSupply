@@ -1,28 +1,16 @@
 #include <Arduino.h>
 
 // I sometimes get a V+ encoder signal at boot, investigate....
-// Maybe the cap across it doesn't have time to charge or something? 
+// Maybe the cap across it doesn't have time to charge or something?
 // Would a delay help?
 
 #include "LCD_defs.h"
+#include "analog.h"
 #include "control.h"
 #include "defines.h"
 #include "encoders.h"
-#include "analog.h"
-//#include <ADS7828.h>
 
 MCP23017 expander(MCP_ADDR);
-
-//#define ADC_READ_AVG 10
-//ADS7828 adc(ADC_ADDR);
-//int16_t chan1VRead;
-//int16_t chan1IRead;
-
-// fuck this...
-// uint16_t readings[ADC_READ_AVG] = {0}; // the readings from the analog input
-// uint8_t readIndex = 0;                 // the index of the current reading
-// uint32_t total = 0;   // the running total
-// uint16_t average = 0; // the average
 
 void setup() {
 
@@ -86,7 +74,7 @@ void setup() {
   expander.digitalWrite(PORT_B, LED_VMINUS_EN, HIGH);
   expander.digitalWrite(PORT_B, LED_TRACKING_EN, HIGH);
 
-  lcdInit(); // has a 2sec delay
+  lcdInit(); // has a 2sec delay for boot screen
 
   expander.digitalWrite(PORT_B, LED_VPLUS_EN, LOW);
   expander.digitalWrite(PORT_B, LED_VMINUS_EN, LOW);
@@ -105,51 +93,11 @@ void loop() {
   handleExpanderInputs();
   handleEncoders();
   handleSerial();
-  blinking();
+  handleAnalog();
 
   // debug
+  blinking();
   testAnalog();
-
-  handleAnalog();
-/*
-  uint32_t currentMillis = millis();
-  static uint32_t previousMillis = 0;
-
-  if (((uint32_t)(currentMillis - previousMillis) >= 1) && getChannel1State()) {
-
-    static uint8_t readIndex = 0;
-
-    static uint16_t readingsV[ADC_READ_AVG] = {0};
-    static uint32_t totalV = 0;
-
-    static uint16_t readingsI[ADC_READ_AVG] = {0};
-    static uint32_t totalI = 0;
-
-    // subtract the last reading:
-    totalV = totalV - readingsV[readIndex];
-    totalI = totalI - readingsI[readIndex];
-    // read from the sensor:
-    //    readings[readIndex] = adc.read(0, SD);
-    readingsV[readIndex] = adc.read(0, DF);
-    readingsI[readIndex] = adc.read(2, DF);
-    // add the reading to the total:
-    totalV = totalV + readingsV[readIndex];
-    totalI = totalI + readingsI[readIndex];
-    // advance to the next position in the array:
-    readIndex = readIndex + 1;
-
-    // End of the array, wrap around
-    if (readIndex >= ADC_READ_AVG) {
-      readIndex = 0;
-    }
-
-    // calculate the average:
-    chan1VRead = totalV / ADC_READ_AVG;
-    chan1IRead = totalI / ADC_READ_AVG;
-
-    previousMillis = currentMillis;
-  }
-  */
 }
 
 void blinking() {
@@ -281,40 +229,3 @@ void scanI2C() {
     delay(5000); // wait 5 seconds for next scan
   }
 }
-/*
-void readADC() {
-
-  uint16_t read_value = 0;
-  float voltage = 0;
-
-  // for (int x = 0; x <= 7; x++) {
-  for (int x = 0; x <= 1; x++) {
-
-    read_value = adc.read(x, SD);
-    voltage = read_value * (2500.0 / 4096.0);
-
-    Serial.print("Channel ");
-    Serial.print(x);
-    Serial.print(": ");
-    Serial.print(read_value);
-    Serial.print(" (");
-    Serial.print(voltage, 0);
-    Serial.println(" mV)");
-  }
-
-  Serial.println();
-}
-
-void testAnalog() {
-
-  uint32_t currentMillis = millis();  // Get snapshot of time
-  static uint32_t previousMillis = 0; // Tracks the time since last event fired
-  static bool ledState;
-
-  if ((uint32_t)(currentMillis - previousMillis) >= 500) {
-    writeDAC();
-    readADC();
-    previousMillis = currentMillis;
-  }
-}
-*/

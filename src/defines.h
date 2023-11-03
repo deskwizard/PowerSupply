@@ -1,5 +1,5 @@
-#ifndef _DEFINES_H
-#define _DEFINES_H
+#ifndef _DEFINES_H_
+#define _DEFINES_H_
 
 #include "BluetoothSerial.h"
 #include "MCP23017.h"
@@ -23,12 +23,12 @@
 #define UP 1
 
 // LED blinking
-#define FLASH_INTERVAL 250
+#define FLASH_INTERVAL 1000
 
 // Inputs timer interrupt frequency
 #define TIMER_FREQ 1000 // In hertz
 
-#define VREF_MV 4096.0
+#define VREF_MV 2489.0f
 //#define OUT_GAIN 5.0
 #define OUT_GAIN 10.0
 #define MAX_V_CODE 3000

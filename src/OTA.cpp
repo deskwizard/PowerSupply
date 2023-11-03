@@ -102,7 +102,6 @@ void initOTA() {
 #else
 
 void initOTA() { return; }
-
 void handleOTA() { return; }
 
 #endif
