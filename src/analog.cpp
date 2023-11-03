@@ -100,6 +100,7 @@ void setChan2I(uint16_t code) {
 void initADC() { adc.begin(INT); }
 
 void handleAnalog() {
+
   uint32_t currentMillis = millis();
   static uint32_t previousMillis = 0;
 
@@ -113,17 +114,19 @@ void handleAnalog() {
     static uint16_t readingsI[ADC_READ_AVG] = {0};
     static uint32_t totalI = 0;
 
-    // subtract the last reading:
+    // Subtract the last readings
     totalV = totalV - readingsV[readIndex];
     totalI = totalI - readingsI[readIndex];
-    // read from the sensor:
-    //    readings[readIndex] = adc.read(0, SD);
-    readingsV[readIndex] = adc.read(0, DF);
-    readingsI[readIndex] = adc.read(2, DF);
-    // add the reading to the total:
+
+    // Read ADC channels
+    readingsV[readIndex] = adc.read(ADC_CHAN1_V, SD);
+    readingsI[readIndex] = adc.read(ADC_CHAN1_I, SD);
+
+    // Add reading to the total:
     totalV = totalV + readingsV[readIndex];
     totalI = totalI + readingsI[readIndex];
-    // advance to the next position in the array:
+
+    // Advance to the next position in the array:
     readIndex = readIndex + 1;
 
     // End of the array, wrap around

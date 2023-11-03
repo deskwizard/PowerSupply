@@ -10,6 +10,10 @@
 #define DAC_CHAN2_V 4
 #define DAC_CHAN2_I 6
 
+#define ADC_CHAN1_V 0
+#define ADC_CHAN1_I 2
+#define ADC_CHAN2_V 4
+#define ADC_CHAN2_I 6
 #define ADC_READ_AVG 10  // Number of readings to take for averaging
 
 void testAnalog();
