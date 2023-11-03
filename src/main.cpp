@@ -197,9 +197,9 @@ void scanI2C() {
 
     nDevices = 0;
     for (address = 1; address < 127; address++) {
-      // The i2c_scanner uses the return value of
-      // the Write.endTransmisstion to see if
-      // a device did acknowledge to the address.
+      
+      // Uses the return value of the Wiree.endTransmisstion to see if
+      // a device acknowledge the address.
       Wire.beginTransmission(address);
       error = Wire.endTransmission();
 

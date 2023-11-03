@@ -641,11 +641,11 @@ void displayTitle() {
 
   lcd.setTextColor(ILI9341_CYAN);
   lcd.setCursor(20, V1_ROW);
-  lcd.print("P");
+  lcd.print("J");
   lcd.setTextColor(ILI9341_RED);
-  lcd.print("O");
-  lcd.setTextColor(ILI9341_MAGENTA);
   lcd.print("A");
+  lcd.setTextColor(ILI9341_MAGENTA);
+  lcd.print("F");
   lcd.setTextColor(ILI9341_ORANGE2);
   lcd.print("PSU");
 
