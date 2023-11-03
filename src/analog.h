@@ -31,6 +31,8 @@ void setChan2I(uint16_t code);
 /*                             ADC                              */
 /****************************************************************/
 
+#define ADC_READ_AVG 10
+
 void initADC();
 
 //debug
