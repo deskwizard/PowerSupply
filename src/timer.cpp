@@ -9,12 +9,12 @@ void IRAM_ATTR onTimer() { // Needs to be before setup()
 
   portENTER_CRITICAL_ISR(&timerMux);
 
-  // Rotary encoder(s) read functions
-  currentEnc1Pos = getEnc1Pos();
-  currentEnc2Pos = getEnc2Pos();
+  // Rotary encoders rotation
+  getEnc1Pos();
+  getEnc2Pos();
 
-  // Key(s) debouncing routine
-  pinRead();
+  // Rotary encoders switches
+  getEncSwitches();
 
   // Check for interrupt signal from MCP23017
   ExpanderIntFlag = !digitalRead(IN_MCP_INT);

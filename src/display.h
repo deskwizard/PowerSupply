@@ -1,5 +1,5 @@
-#ifndef _LCD_DEFS_
-#define _LCD_DEFS_
+#ifndef _DISPLAY_H_
+#define _DISPLAY_H_
 
 // Color picker
 // https://www.google.com/search?q=html+color+picker&oq=html+color+picker&aqs=chrome..69i57j0l9.2350j0j7&sourceid=chrome&ie=UTF-8

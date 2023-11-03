@@ -1,4 +1,4 @@
-#include "LCD_defs.h"
+#include "display.h"
 #include "defines.h"
 
 BluetoothSerial BT_Serial;

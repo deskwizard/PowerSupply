@@ -1,7 +1,8 @@
-#include "LCD_defs.h"
+#include "display.h"
 #include "control.h"
-#include "defines.h"
-#include "externs.h"
+#include "MCP23017.h"
+
+MCP23017 expander(MCP_ADDR);
 
 volatile bool ExpanderIntFlag = false;
 
@@ -36,19 +37,44 @@ void initExpander() {
   expander.enableInterrupt(IN_CHAN1_ERR, IF_CHANGED);
 
 #ifndef ERR_DISABLE
-  expander.enableInterrupt(IN_VPLUS_ERR, IF_CHANGED);
-  expander.enableInterrupt(IN_VMINUS_ERR, IF_CHANGED);
+  expander.enableInterrupt(IN_CHAN1_ERR, IF_CHANGED);
+  expander.enableInterrupt(IN_CHAN2_ERR, IF_CHANGED);
 #endif
-
-  // outputMode = expander.digitalRead(PORT_A, IN_MODE);
 
   expander.portMode(PORT_B, OUTPUT);
 
-  //  expander.digitalWrite(PORT_B, 0, HIGH);
-
   expander.digitalWrite(PORT_B, LED_RANGE, getRailSetting());
-  // expander.intPinMode(OPEN_DRAIN);
 }
+
+/************************************************************
+ *                         Outputs                          *
+ ************************************************************/
+
+void setTrackingLED(bool state) {
+  expander.digitalWrite(PORT_B, LED_TRACKING_EN, state);
+}
+
+void setChannel1StateLED(bool state) {
+  expander.digitalWrite(PORT_B, LED_VPLUS_EN, state);
+}
+
+void setChannel2StateLED(bool state) {
+  expander.digitalWrite(PORT_B, LED_VMINUS_EN, state);
+}
+
+void setAllLEDs(bool state) {
+  expander.digitalWrite(PORT_B, LED_TRACKING_EN, state);
+  expander.digitalWrite(PORT_B, LED_VPLUS_EN, state);
+  expander.digitalWrite(PORT_B, LED_VMINUS_EN, state);
+}
+
+void setExpanderDebugLED(bool state) {
+  expander.digitalWrite(PORT_B, MCP_DEBUG_LED, state);
+}
+
+/************************************************************
+ *                          Inputs                          *
+ ************************************************************/
 
 void handleExpanderInputs() {
 

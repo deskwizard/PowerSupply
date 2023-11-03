@@ -51,5 +51,6 @@
 #define LED_VMINUS_EN 5
 #define LED_TRACKING_EN 6
 #define LED_RANGE 2
+#define MCP_DEBUG_LED 3
 
 #endif

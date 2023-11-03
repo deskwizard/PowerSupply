@@ -1,4 +1,4 @@
-#include "LCD_defs.h"
+#include "display.h"
 #include "control.h"
 
 Adafruit_ILI9341 lcd = Adafruit_ILI9341(LCD_CS, LCD_DC, LCD_RST);

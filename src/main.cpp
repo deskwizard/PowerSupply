@@ -1,16 +1,17 @@
-#include <Arduino.h>
 
 // I sometimes get a V+ encoder signal at boot, investigate....
 // Maybe the cap across it doesn't have time to charge or something?
 // Would a delay help?
 
-#include "LCD_defs.h"
+
+#include <Arduino.h>
+#include "display.h"
 #include "analog.h"
 #include "control.h"
 #include "defines.h"
 #include "encoders.h"
+#include "expander.h"
 
-MCP23017 expander(MCP_ADDR);
 
 void setup() {
 
@@ -69,17 +70,22 @@ void setup() {
   initEncoders();
   initExpander();
   initTimer();
+  /*
+    expander.digitalWrite(PORT_B, LED_VPLUS_EN, HIGH);
+    expander.digitalWrite(PORT_B, LED_VMINUS_EN, HIGH);
+    expander.digitalWrite(PORT_B, LED_TRACKING_EN, HIGH);
+  */
 
-  expander.digitalWrite(PORT_B, LED_VPLUS_EN, HIGH);
-  expander.digitalWrite(PORT_B, LED_VMINUS_EN, HIGH);
-  expander.digitalWrite(PORT_B, LED_TRACKING_EN, HIGH);
+  setAllLEDs(HIGH);
 
   lcdInit(); // has a 2sec delay for boot screen
 
-  expander.digitalWrite(PORT_B, LED_VPLUS_EN, LOW);
-  expander.digitalWrite(PORT_B, LED_VMINUS_EN, LOW);
-  expander.digitalWrite(PORT_B, LED_TRACKING_EN, LOW);
-
+  setAllLEDs(LOW);
+  /*
+    expander.digitalWrite(PORT_B, LED_VPLUS_EN, LOW);
+    expander.digitalWrite(PORT_B, LED_VMINUS_EN, LOW);
+    expander.digitalWrite(PORT_B, LED_TRACKING_EN, LOW);
+  */
   digitalWrite(DEBUG_LED, LOW);
 
   serial_println("Ready");
@@ -119,13 +125,16 @@ void blinking() {
     ledState = !ledState;
     digitalWrite(DEBUG_LED, ledState);
 
-    expander.digitalWrite(PORT_B, 2, !ledState);
+    // expander.digitalWrite(PORT_B, 2, !ledState);
+    setExpanderDebugLED(!ledState);
 
     if (getChannel1ErrorFlag()) {
-      expander.digitalWrite(PORT_B, LED_VPLUS_EN, ledState);
+      //expander.digitalWrite(PORT_B, LED_VPLUS_EN, ledState);
+      setChannel1StateLED(ledState);
     }
     if (getChannel2ErrorFlag()) {
-      expander.digitalWrite(PORT_B, LED_VMINUS_EN, ledState);
+      //expander.digitalWrite(PORT_B, LED_VMINUS_EN, ledState);
+      setChannel2StateLED(ledState);
     }
 
     previousMillis = currentMillis;

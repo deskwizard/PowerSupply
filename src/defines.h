@@ -2,7 +2,6 @@
 #define _DEFINES_H_
 
 #include "BluetoothSerial.h"
-#include "MCP23017.h"
 #include <Arduino.h>
 #include <SPI.h>
 #include <Wire.h>
@@ -55,10 +54,6 @@ void startBT();
 // From OTA.cpp
 void initOTA();
 void handleOTA();
-
-// From inputs_MCP.cpp
-void handleExpanderInputs();
-void initExpander();
 
 
 // From serial_helpers.cpp

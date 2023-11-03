@@ -1,11 +1,15 @@
 #include "encoders.h"
+#include "display.h"
+#include "control.h"
 
 // Encoders position variables
 volatile uint8_t currentEnc1Pos = 0;
 uint8_t lastEnc1Pos = 0;
+uint16_t stepSizeEnc1 = 1;
 
 volatile uint8_t currentEnc2Pos = 0;
 uint8_t lastEnc2Pos = 0;
+uint16_t stepSizeEnc2 = 1;
 
 // Old stuff:
 // Gain is 5x on dual rail, so having 2/20/200 does single decade(?) change in
@@ -14,8 +18,6 @@ uint8_t lastEnc2Pos = 0;
 // uint16_t stepSizeEnc1 = 2;
 // uint16_t stepSizeEnc2 = 2;
 
-uint16_t stepSizeEnc1 = 1;
-uint16_t stepSizeEnc2 = 1;
 
 // Encoder switch variable
 volatile uint8_t currentKeyState = 0; // debounced state
@@ -30,14 +32,15 @@ void initEncoders() {
 
   // We need to pre-load the current values,
   // otherwise it might trigger on powerup/reset
-  currentEnc1Pos = getEnc1Pos();
+  getEnc1Pos();
   lastEnc1Pos = currentEnc1Pos;
-  currentEnc2Pos = getEnc2Pos();
+  getEnc2Pos();
   lastEnc2Pos = currentEnc2Pos;
 }
 
-// Functions called from interrupt vector
-uint8_t IRAM_ATTR getEnc1Pos() {
+//***************** Functions called from ISR handler *****************//
+
+void IRAM_ATTR getEnc1Pos() {
 
   uint8_t enc1Pos = 0;
 
@@ -47,10 +50,10 @@ uint8_t IRAM_ATTR getEnc1Pos() {
   if (digitalRead(ENC1_B_PIN))
     enc1Pos |= (1 << 0);
 
-  return enc1Pos;
+  currentEnc1Pos = enc1Pos;
 }
 
-uint8_t IRAM_ATTR getEnc2Pos() {
+void IRAM_ATTR getEnc2Pos() {
 
   uint8_t enc2Pos = 0;
 
@@ -60,10 +63,10 @@ uint8_t IRAM_ATTR getEnc2Pos() {
   if (digitalRead(ENC2_B_PIN))
     enc2Pos |= (1 << 0);
 
-  return enc2Pos;
+  currentEnc2Pos = enc2Pos;
 }
 
-// Functions called from loop()
+//***************** Functions called from loop() *****************//
 void handleEncoders() {
 
   bool direction = DOWN;
@@ -151,7 +154,7 @@ void initKeys() {
 
 // Function called from interrupt vector
 
-void IRAM_ATTR pinRead() {
+void IRAM_ATTR getEncSwitches() {
 
   static uint8_t counter = 0xFF;
 

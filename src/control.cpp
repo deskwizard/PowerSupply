@@ -1,5 +1,7 @@
 #include "control.h"
 #include "analog.h"
+#include "expander.h"
+#include "display.h"
 
 bool channel1ErrorFlag = false;
 bool channel2ErrorFlag = false;
@@ -250,7 +252,8 @@ void toggleTracking() {
     stepSizeEnc2 = stepSizeEnc1;
   }
 
-  expander.digitalWrite(PORT_B, LED_TRACKING_EN, trackingMode);
+  // expander.digitalWrite(PORT_B, LED_TRACKING_EN, trackingMode);
+  setTrackingLED(trackingMode);
 
   displayTracking();
 }
@@ -294,7 +297,8 @@ void setChan1State(bool state) {
   setChannelState(DAC_CHAN1_V, channel1State);
 
   digitalWrite(OUT_VPLUS, channel1State);
-  expander.digitalWrite(PORT_B, LED_VPLUS_EN, channel1State);
+  // expander.digitalWrite(PORT_B, LED_VPLUS_EN, channel1State);
+  setChannel1StateLED(channel1State);
 
   /*************** DEBUG ***************/
   if (channel1State) {
@@ -318,7 +322,8 @@ void setChan2State(bool state) {
   setChannelState(DAC_CHAN2_V, channel2State);
 
   digitalWrite(OUT_VMINUS, channel2State);
-  expander.digitalWrite(PORT_B, LED_VMINUS_EN, channel2State);
+  //expander.digitalWrite(PORT_B, LED_VMINUS_EN, channel2State);
+  setChannel2StateLED(channel2State);
 
   /*************** DEBUG ***************/
   if (channel2State) {

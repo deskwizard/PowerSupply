@@ -1,13 +1,8 @@
 #ifndef _CONTROL_H_
 #define _CONTROL_H_
 
-#include "LCD_defs.h"
 #include "defines.h"
 #include "externs.h"
-
-void writeDAC();
-
-
 
 bool getRailSetting();
 bool getTrackingMode();
@@ -37,7 +32,5 @@ void changeChan2I(bool direction);
 void toggleOutputMode();
 // void toggleRail();
 void toggleTracking();
-
-void dac_init();
 
 #endif
