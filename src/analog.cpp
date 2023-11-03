@@ -17,8 +17,6 @@ int16_t chan2Icode = 0;
 // int16_t chan1VRead;
 // int16_t chan1IRead;
 
-int16_t chan1IRead;
-
 void setChannelState(uint8_t channel, bool state) {
   dac.setChannelState(channel, state);
 }
