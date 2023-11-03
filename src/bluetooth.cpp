@@ -1,5 +1,5 @@
-#include "display.h"
 #include "defines.h"
+#include "display.h"
 
 BluetoothSerial BT_Serial;
 
@@ -47,8 +47,7 @@ void initBT() {
 
   BT_Serial.register_callback(callback);
 
-
-/// DEBUG inversion 
+  /// DEBUG inversion
   if (!waitForBT) { // Encoder 1 key down at boot
 
     startBT();

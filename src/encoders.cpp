@@ -1,6 +1,6 @@
 #include "encoders.h"
-#include "display.h"
 #include "control.h"
+#include "display.h"
 
 // Encoders position variables
 volatile uint8_t currentEnc1Pos = 0;
@@ -17,7 +17,6 @@ uint16_t stepSizeEnc2 = 1;
 // behaves the same (10x part in the encoder switch handling)
 // uint16_t stepSizeEnc1 = 2;
 // uint16_t stepSizeEnc2 = 2;
-
 
 // Encoder switch variable
 volatile uint8_t currentKeyState = 0; // debounced state

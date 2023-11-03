@@ -1,7 +1,7 @@
 #include "control.h"
 #include "analog.h"
-#include "expander.h"
 #include "display.h"
+#include "expander.h"
 
 bool channel1ErrorFlag = false;
 bool channel2ErrorFlag = false;
@@ -322,7 +322,7 @@ void setChan2State(bool state) {
   setChannelState(DAC_CHAN2_V, channel2State);
 
   digitalWrite(OUT_VMINUS, channel2State);
-  //expander.digitalWrite(PORT_B, LED_VMINUS_EN, channel2State);
+  // expander.digitalWrite(PORT_B, LED_VMINUS_EN, channel2State);
   setChannel2StateLED(channel2State);
 
   /*************** DEBUG ***************/

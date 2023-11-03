@@ -3,17 +3,20 @@
 #include <ADS7828.h>
 #include <DAC7678.h>
 
+ADS7828 adc(ADC_ADDR);
 DAC7678 dac(DAC_ADDR);
 
-// Needs to be signed for encoder step size things
+// Needs to be signed for encoder step size things...
 int16_t chan1Vcode = 500;
 int16_t chan1Icode = -1; // ----------- WTF?? -----------
-int16_t chan2Vcode = 500;
-int16_t chan2Icode = 0;
-
-#define ADC_READ_AVG 10
-ADS7828 adc(ADC_ADDR);
 int16_t chan1VRead;
+int16_t chan1IRead;
+
+int16_t chan2Vcode = 250;
+int16_t chan2Icode = 0;
+// int16_t chan1VRead;
+// int16_t chan1IRead;
+
 int16_t chan1IRead;
 
 void setChannelState(uint8_t channel, bool state) {
@@ -45,7 +48,7 @@ void initDAC() {
   // dac.setChannelState(DAC_CHAN1_V, true);
   // dac.setChannelState(DAC_CHAN2_V, true);
 
-  //---------------------------------------
+  //---------------------------------------------------------
 }
 
 void setChan1V() {
@@ -99,7 +102,7 @@ void setChan2I(uint16_t code) {
 void initADC() { adc.begin(INT); }
 
 void handleAnalog() {
-    uint32_t currentMillis = millis();
+  uint32_t currentMillis = millis();
   static uint32_t previousMillis = 0;
 
   if (((uint32_t)(currentMillis - previousMillis) >= 1) && getChannel1State()) {

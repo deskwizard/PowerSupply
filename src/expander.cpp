@@ -1,6 +1,6 @@
-#include "display.h"
-#include "control.h"
 #include "MCP23017.h"
+#include "control.h"
+#include "display.h"
 
 MCP23017 expander(MCP_ADDR);
 

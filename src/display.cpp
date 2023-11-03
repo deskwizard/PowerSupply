@@ -365,8 +365,8 @@ void displayUpdateChan1V() {
   //     (VREF_MV / 4096) * (chan1Vcode - CHAN1V_OFFSET) * OUT_GAIN;
 
   /*
-    if (getRailSetting() == SINGLE) { // Our gain is 10x on single rail instead of
-    5x,
+    if (getRailSetting() == SINGLE) { // Our gain is 10x on single rail instead
+    of 5x,
                                  // so double the value
       outputValue = outputValue * 2;
     }

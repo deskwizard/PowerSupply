@@ -8,9 +8,7 @@
 #include "defines.h"
 #include "externs.h"
 
-#define AOFF
-
-//#define LCD_TEST
+#define AOFF // lol wtf is that
 
 #include "Adafruit_GFX.h"
 #include "Adafruit_ILI9341.h"
@@ -35,7 +33,7 @@
 #define V2_ROW ORIGIN + V1_ROW
 #define I2_ROW ORIGIN + I1_ROW
 
-//#define ZONE_COLOR ILI9341_BLUE
+// #define ZONE_COLOR ILI9341_BLUE
 #define ZONE_COLOR ILI9341_BLACK
 
 #define BORDERS_H 140
@@ -49,9 +47,9 @@
 #define ILI9341_DARKYELLOW 0x7BE0
 #define ILI9341_ORANGE2 0xBB80
 
-//#define COLOR_TRACK   ILI9341_LIGHTORANGE
-//#define COLOR_CHAN1   ILI9341_DARKCYAN
-//#define COLOR_CHAN2   ILI9341_DARKYELLOW
+// #define COLOR_TRACK   ILI9341_LIGHTORANGE
+// #define COLOR_CHAN1   ILI9341_DARKCYAN
+// #define COLOR_CHAN2   ILI9341_DARKYELLOW
 
 #define COLOR_TRACK_OFF ILI9341_ORANGE
 #define COLOR_TRACK_ON ILI9341_LIGHTORANGE

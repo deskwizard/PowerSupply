@@ -1,4 +1,4 @@
-//#define OTA_ENABLED
+// #define OTA_ENABLED
 
 #ifdef OTA_ENABLED
 

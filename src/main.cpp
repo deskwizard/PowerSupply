@@ -3,15 +3,13 @@
 // Maybe the cap across it doesn't have time to charge or something?
 // Would a delay help?
 
-
-#include <Arduino.h>
-#include "display.h"
 #include "analog.h"
 #include "control.h"
 #include "defines.h"
+#include "display.h"
 #include "encoders.h"
 #include "expander.h"
-
+#include <Arduino.h>
 
 void setup() {
 
@@ -70,22 +68,12 @@ void setup() {
   initEncoders();
   initExpander();
   initTimer();
-  /*
-    expander.digitalWrite(PORT_B, LED_VPLUS_EN, HIGH);
-    expander.digitalWrite(PORT_B, LED_VMINUS_EN, HIGH);
-    expander.digitalWrite(PORT_B, LED_TRACKING_EN, HIGH);
-  */
 
   setAllLEDs(HIGH);
 
   lcdInit(); // has a 2sec delay for boot screen
 
   setAllLEDs(LOW);
-  /*
-    expander.digitalWrite(PORT_B, LED_VPLUS_EN, LOW);
-    expander.digitalWrite(PORT_B, LED_VMINUS_EN, LOW);
-    expander.digitalWrite(PORT_B, LED_TRACKING_EN, LOW);
-  */
   digitalWrite(DEBUG_LED, LOW);
 
   serial_println("Ready");
@@ -95,15 +83,18 @@ void setup() {
 void loop() {
 
   // handleOTA();
+
   handleKeys();
   handleExpanderInputs();
   handleEncoders();
+
   handleSerial();
+
   handleAnalog();
 
   // debug
   blinking();
-  testAnalog();
+  // testAnalog();
 }
 
 void blinking() {
@@ -125,15 +116,12 @@ void blinking() {
     ledState = !ledState;
     digitalWrite(DEBUG_LED, ledState);
 
-    // expander.digitalWrite(PORT_B, 2, !ledState);
     setExpanderDebugLED(!ledState);
 
     if (getChannel1ErrorFlag()) {
-      //expander.digitalWrite(PORT_B, LED_VPLUS_EN, ledState);
       setChannel1StateLED(ledState);
     }
     if (getChannel2ErrorFlag()) {
-      //expander.digitalWrite(PORT_B, LED_VMINUS_EN, ledState);
       setChannel2StateLED(ledState);
     }
 

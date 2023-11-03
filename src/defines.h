@@ -2,14 +2,15 @@
 #define _DEFINES_H_
 
 #include "BluetoothSerial.h"
+#include "pins.h"
 #include <Arduino.h>
 #include <SPI.h>
 #include <Wire.h>
 #include <esp_task_wdt.h>
-#include "pins.h"
 
 #define ERR_DISABLE
 #define WAIT_FOR_BT
+// #define LCD_TEST
 
 #define WDT_TIMEOUT 10 // 10 seconds WDT
 
@@ -28,7 +29,7 @@
 #define TIMER_FREQ 1000 // In hertz
 
 #define VREF_MV 2489.0f
-//#define OUT_GAIN 5.0
+// #define OUT_GAIN 5.0
 #define OUT_GAIN 10.0
 #define MAX_V_CODE 3000
 #define MAX_I_CODE 4095 // 1000
@@ -54,7 +55,6 @@ void startBT();
 // From OTA.cpp
 void initOTA();
 void handleOTA();
-
 
 // From serial_helpers.cpp
 void handleSerial();
