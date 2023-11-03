@@ -36,7 +36,9 @@
 
 // In case we need some in the future
 #define CHAN1V_OFFSET 0
+#define CHAN1I_OFFSET 0
 #define CHAN2V_OFFSET 0
+#define CHAN2I_OFFSET 0
 
 // Output mode (unipolar/bipolar)
 #define SINGLE 1

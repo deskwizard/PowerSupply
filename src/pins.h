@@ -25,10 +25,10 @@
 
 #define ENC1_A_PIN 33
 #define ENC1_B_PIN 32
-#define ENC1_BTN_PIN 35
+#define ENC1_SW_PIN 35
 #define ENC2_A_PIN 34
 #define ENC2_B_PIN 39
-#define ENC2_BTN_PIN 36
+#define ENC2_SW_PIN 36
 
 /**********************************************/
 //              MCP23017 Pins

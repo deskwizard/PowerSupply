@@ -132,11 +132,11 @@ void handleEncoders() {
 void initKeys() {
 
   // Pins defaults to inputs, so we only need to set the pullups here
-  pinMode(ENC1_BTN_PIN, INPUT_PULLUP);
-  pinMode(ENC2_BTN_PIN, INPUT_PULLUP);
+  pinMode(ENC1_SW_PIN, INPUT_PULLUP);
+  pinMode(ENC2_SW_PIN, INPUT_PULLUP);
 
-  bitWrite(currentKeyState, 0, digitalRead(ENC1_BTN_PIN));
-  bitWrite(currentKeyState, 1, digitalRead(ENC2_BTN_PIN));
+  bitWrite(currentKeyState, 0, digitalRead(ENC1_SW_PIN));
+  bitWrite(currentKeyState, 1, digitalRead(ENC2_SW_PIN));
 
   Serial.println();
   Serial.print("Boot keys:    ENC1 ");
@@ -159,13 +159,9 @@ void IRAM_ATTR getEncSwitches() {
 
   // Read in the different bits
   uint8_t i = 0;
-  /*
-    bitWrite(i, 0, (ENC1_PIN & (1 << ENC1_KEY)) );
-    bitWrite(i, 1, (ENC2_PIN & (1 << ENC2_KEY)) );
-  */
 
-  bitWrite(i, 0, digitalRead(ENC1_BTN_PIN));
-  bitWrite(i, 1, digitalRead(ENC2_BTN_PIN));
+  bitWrite(i, 0, digitalRead(ENC1_SW_PIN));
+  bitWrite(i, 1, digitalRead(ENC2_SW_PIN));
 
   if (i != currentKeyState) { // If the current debounced keys differs from the
                               // pin read

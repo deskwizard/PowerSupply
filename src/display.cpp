@@ -24,7 +24,7 @@ void lcdInit0() {
 
   // printDebugPrefixLCD("lcdInit0()");
 
-  lcd.begin();
+  lcd.begin(80000000);
 
   lcd.setRotation(0);
 

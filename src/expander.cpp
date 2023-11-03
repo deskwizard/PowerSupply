@@ -43,7 +43,6 @@ void initExpander() {
 
   expander.portMode(PORT_B, OUTPUT);
 
-  expander.digitalWrite(PORT_B, LED_RANGE, getRailSetting());
 }
 
 /************************************************************
