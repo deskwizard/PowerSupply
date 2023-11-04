@@ -413,7 +413,7 @@ void displayUpdateChan1V() {
   }
 
   canvasChan1V.print(float(outputValue / 1000.0), 2);
-  //canvasChan1V.print(99.0, 2);
+  // canvasChan1V.print(99.0, 2);
 
   lcd.drawBitmap(25, 37, canvasChan1V.getBuffer(), 115, 40, foreground,
                  ILI9341_BLACK); // Copy to screen
@@ -486,7 +486,8 @@ void displayUpdateChan2V() {
 
   canvasChan2V.print(float(outputValue / 1000.0), 2);
 
-  lcd.drawBitmap(BORDER_W + (BORDER_SIZE * 2) + CENTER_SPACING, 37, canvasChan2V.getBuffer(), 132, 40, foreground,
+  lcd.drawBitmap(BORDER_W + (BORDER_SIZE * 2) + CENTER_SPACING, 37,
+                 canvasChan2V.getBuffer(), 132, 40, foreground,
                  ILI9341_BLACK); // Copy to screen
 }
 
@@ -522,38 +523,42 @@ void displayUpdateChan2I() {
     }
   }
 
-  lcd.drawBitmap(BORDER_W + (BORDER_SIZE * 2) + CENTER_SPACING + 15, 86, canvasChan2I.getBuffer(), 115, 40, foreground,
+  lcd.drawBitmap(BORDER_W + (BORDER_SIZE * 2) + CENTER_SPACING + 15, 86,
+                 canvasChan2I.getBuffer(), 115, 40, foreground,
                  ILI9341_BLACK); // Copy to screen
 }
 
 void displaySelector1() {
 
   static uint16_t v_origin = V1_ROW + 5;
-  uint16_t h_origin = 117;
-  uint8_t length = 24;
+  uint16_t h_origin = 116;
+  uint8_t length = 23;
 
-  if (getOutputMode() == MODE_CC) {
-    if (v_origin == V1_ROW + 5) { // Wipe the previous indicator
-      lcd.fillRect(10, v_origin, 120, 5, ZONE_COLOR);
-    }
-    v_origin = I1_ROW + 5;
-  } else {                        // We're in CV mode
-    if (v_origin == I1_ROW + 5) { // Wipe the previous indicator
+  if (getOutputMode() == MODE_CV) { // We're in CV mode
+    if (v_origin == I1_ROW + 5) {   // Wipe the previous indicator
       lcd.fillRect(10, v_origin, 120, 5, ZONE_COLOR);
     }
     v_origin = V1_ROW + 5;
   }
-
+  /*
+    else {
+      if (v_origin == V1_ROW + 5) { // Wipe the previous indicator
+        lcd.fillRect(10, v_origin, 120, 5, ZONE_COLOR);
+      }
+      v_origin = I1_ROW + 5;
+    }
+   */
   // Wipe current indicator
   lcd.fillRect(27, v_origin, 120, 5, ZONE_COLOR);
 
   if (stepSizeEnc1 == 100) {
     h_origin = 27;
-    length = 50;
-    if (getOutputMode() == MODE_CC) {
-      length = 60;
-    }
-
+    length = 48;
+    /*
+        if (getOutputMode() == MODE_CC) {
+          length = 60;
+        }
+     */
   } else if (stepSizeEnc1 == 10) {
     h_origin = 91;
   }
@@ -563,6 +568,48 @@ void displaySelector1() {
   }
 }
 
+void displaySelector2() {
+
+  static uint16_t v_origin = V1_ROW + 5;
+  uint16_t h_origin = X_RES - (((BORDER_SIZE * 2)) + 32);
+  uint8_t length = 24;
+
+  if (getOutputMode() == MODE_CV) { // We're in CV mode
+    if (v_origin == I1_ROW + 5) {   // Wipe the previous indicator
+      lcd.fillRect(10, v_origin, 120, 5, ZONE_COLOR);
+    }
+    v_origin = V1_ROW + 5;
+  }
+
+  /*   else {
+      if (v_origin == V1_ROW + 5) { // Wipe the previous indicator
+        lcd.fillRect(10, v_origin, 120, 5, ZONE_COLOR);
+      }
+      v_origin = I1_ROW + 5;
+    } */
+
+  // Wipe current indicator
+  lcd.fillRect(BORDER_W + (BORDER_SIZE * 2) + CENTER_SPACING + 18, v_origin,
+               120, 5, ZONE_COLOR);
+
+  if (stepSizeEnc2 == 100) {
+    h_origin = BORDER_W + (BORDER_SIZE * 2) + CENTER_SPACING + 18;
+    length = 48;
+    /*
+        if (getOutputMode() == MODE_CC) {
+          length = 60;
+        }
+     */
+  } else if (stepSizeEnc2 == 10) {
+    h_origin = BORDER_W + (BORDER_SIZE * 2) + CENTER_SPACING + 82;
+  }
+
+  for (uint8_t x = 0; x <= 3; x++) {
+    lcd.drawFastHLine(h_origin, v_origin + x, length, ILI9341_WHITE);
+  }
+}
+
+/*
 void displaySelector2() {
 
   static uint16_t v_origin = V2_ROW + 5;
@@ -599,8 +646,11 @@ void displaySelector2() {
     lcd.drawFastHLine(h_origin, v_origin + x, length, ILI9341_WHITE);
   }
 }
-
+ */
 void displayMode() {
+
+  // Debug
+  return;
 
   lcd.fillRect(190, 150, 35, 20, ILI9341_BLACK);
 
