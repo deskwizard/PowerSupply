@@ -223,7 +223,6 @@ void drawBorders() {
 
   if (getRailSetting() == SINGLE) {
 
-    // TODO: Will need rework for rotation if ever used.
     lcd.fillScreen(ILI9341_BLACK);
 
     // Channel 1
@@ -259,20 +258,20 @@ void drawBorders() {
     // Let's do something to remove the 2 pink bars both sides
     lcd.fillScreen(ILI9341_BLACK);
 
-    lcd.fillRoundRect(0, 0, BORDER_W, Y_RES, ROUNDYNESS, COLOR_CHAN1_OFF);
+    lcd.fillRoundRect(0, 0, BORDER_W, Y_RES, ROUNDYNESS, COLOR_CHAN1_ON);
 
     lcd.fillRoundRect(BORDER_SIZE, BORDER_SIZE, BORDER_W - (2 * BORDER_SIZE),
                       Y_RES - (2 * BORDER_SIZE), ROUNDYNESS, ILI9341_BLACK);
 
     lcd.fillRoundRect(BORDER_W + CENTER_SPACING, 0, BORDER_W, Y_RES, ROUNDYNESS,
-                      COLOR_CHAN2_OFF);
+                      COLOR_CHAN2_ON);
 
     lcd.fillRoundRect(BORDER_W + CENTER_SPACING + BORDER_SIZE, BORDER_SIZE,
                       BORDER_W - (2 * BORDER_SIZE), Y_RES - (2 * BORDER_SIZE),
                       ROUNDYNESS, ILI9341_BLACK);
   }
 
-  displayHeaders1();
+  // displayHeaders1();
   // displayHeaders2();
 }
 
@@ -295,7 +294,7 @@ void displayHeaders1() {
     } else if (getRailSetting()) {
       lcd.setTextColor(COLOR_HR_OFF);
     } else {
-      lcd.setTextColor(COLOR_CHAN1_OFF);
+      lcd.setTextColor(COLOR_CHAN1_ON);
     }
   }
 
@@ -333,7 +332,7 @@ void displayHeaders2() {
       } else if (getRailSetting()) {
         lcd.setTextColor(COLOR_HR_OFF);
       } else {
-        lcd.setTextColor(COLOR_CHAN2_OFF);
+        lcd.setTextColor(COLOR_CHAN2_ON);
       }
     }
   }
