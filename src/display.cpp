@@ -42,7 +42,7 @@ void lcdInit() {
   drawBorders();
 
   displaySelector1();
-  // displaySelector2();
+  displaySelector2();
 
   // displayMode();
 
@@ -60,8 +60,8 @@ void handleDisplay() {
 
     displayUpdateChan1V();
     displayUpdateChan1I();
-    // displayUpdateChan2V();
-    // displayUpdateChan2I();
+    displayUpdateChan2V();
+    displayUpdateChan2I();
 
     previousMillis = currentMillis;
   }
@@ -137,7 +137,7 @@ void displayCh2State() {
   displayHeaders2();
   // displayUnits2();
   displayUpdateChan2V();
-  // displayUpdateChan2I();
+  displayUpdateChan2I();
 }
 
 void displayTracking() {
@@ -415,7 +415,7 @@ void displayUpdateChan1V() {
   canvasChan1V.print(float(outputValue / 1000.0), 2);
   //canvasChan1V.print(99.0, 2);
 
-  lcd.drawBitmap(10, 37, canvasChan1V.getBuffer(), 115, 40, foreground,
+  lcd.drawBitmap(25, 37, canvasChan1V.getBuffer(), 115, 40, foreground,
                  ILI9341_BLACK); // Copy to screen
 }
 
@@ -451,7 +451,7 @@ void displayUpdateChan1I() {
     }
   }
 
-  lcd.drawBitmap(10, 86, canvasChan1I.getBuffer(), 115, 40, foreground,
+  lcd.drawBitmap(25, 86, canvasChan1I.getBuffer(), 115, 40, foreground,
                  ILI9341_BLACK); // Copy to screen
 }
 
@@ -486,7 +486,7 @@ void displayUpdateChan2V() {
 
   canvasChan2V.print(float(outputValue / 1000.0), 2);
 
-  lcd.drawBitmap(40, V2_ROW - 38, canvasChan2V.getBuffer(), 132, 40, foreground,
+  lcd.drawBitmap(BORDER_W + (BORDER_SIZE * 2) + CENTER_SPACING, 37, canvasChan2V.getBuffer(), 132, 40, foreground,
                  ILI9341_BLACK); // Copy to screen
 }
 
@@ -522,14 +522,14 @@ void displayUpdateChan2I() {
     }
   }
 
-  lcd.drawBitmap(60, I2_ROW - 38, canvasChan2I.getBuffer(), 115, 40, foreground,
+  lcd.drawBitmap(BORDER_W + (BORDER_SIZE * 2) + CENTER_SPACING + 15, 86, canvasChan2I.getBuffer(), 115, 40, foreground,
                  ILI9341_BLACK); // Copy to screen
 }
 
 void displaySelector1() {
 
   static uint16_t v_origin = V1_ROW + 5;
-  uint16_t h_origin = 102;
+  uint16_t h_origin = 117;
   uint8_t length = 24;
 
   if (getOutputMode() == MODE_CC) {
@@ -545,17 +545,17 @@ void displaySelector1() {
   }
 
   // Wipe current indicator
-  lcd.fillRect(10, v_origin, 120, 5, ZONE_COLOR);
+  lcd.fillRect(27, v_origin, 120, 5, ZONE_COLOR);
 
   if (stepSizeEnc1 == 100) {
-    h_origin = 62;
+    h_origin = 27;
     length = 50;
     if (getOutputMode() == MODE_CC) {
       length = 60;
     }
 
   } else if (stepSizeEnc1 == 10) {
-    h_origin = 76;
+    h_origin = 91;
   }
 
   for (uint8_t x = 0; x <= 3; x++) {
