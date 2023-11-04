@@ -24,7 +24,7 @@
 #define Y_RES 320
 
 // Origin point for drawing channel 2 stuff
-#define ORIGIN / (Y_RES - BORDERS_H) - 1 
+#define ORIGIN  (Y_RES - BORDERS_H) - 1 
 
 #define IND_LOC_X 180 // X position of the value canvases
 
