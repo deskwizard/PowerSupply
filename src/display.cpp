@@ -1,6 +1,6 @@
 #include "display.h"
-#include "control.h"
 #include "analog.h"
+#include "control.h"
 
 Adafruit_ILI9341 lcd = Adafruit_ILI9341(LCD_CS, LCD_DC, LCD_RST);
 
@@ -379,11 +379,11 @@ void displayUpdateChan1V() {
 
   if (getChannel1State()) {
     foreground = ILI9341_GREEN;
-    // outputValue = chan1VRead;
+    // Serial.println("pouf");
     outputValue = (VREF_MV / 4096) * getChannel1Voltage() * OUT_GAIN;
-    // canvasChan1V.print(float(outputValue / 1000.0), 2);
   } else {
     outputValue = (VREF_MV / 4096) * (chan1Vcode - CHAN1V_OFFSET) * OUT_GAIN;
+    // Serial.println("pow");
   }
 
   if (outputValue < 10000) { // in mV, so 10000 = 10V
@@ -411,15 +411,7 @@ void displayUpdateChan1I() {
   // Needs to be here, else the cursor is wrong the first time
   // the function is called. (wtf...)
   canvasChan1I.setCursor(0, 38);
-  /*
-    // Always show the code for now (unless it's 0)
-    if (chan1Icode >= 0) {
-      canvasChan1I.print(float(chan1Icode / 1000.0), 3);
-    } else {
-      canvasChan1I.print("--------");
-      // TODO wipe indicator, show on 0 crossing upwards
-    }
-  */
+
   if (getChannel1ErrorFlag() == true) {
     foreground = ILI9341_RED;
     canvasChan1I.setFont(&FreeSansBold18pt7b);
@@ -436,21 +428,6 @@ void displayUpdateChan1I() {
     }
   }
 
-  /*
-    if (chan1_enabled == false) {
-      if (modeSetting == MODE_CV) {
-        canvasChan1I.print("--------");
-      } else {
-        canvasChan1I.print(float(chan1Icode / 1000.0), 3);
-      }
-
-    } else {
-      foreground = ILI9341_GREEN;
-      // Print fake number for the actual current reading if enabled
-      canvasChan1I.print(fakeReading1I, 3);
-    }
-  */
-
   lcd.drawBitmap(60, 86, canvasChan1I.getBuffer(), 115, 40, foreground,
                  ILI9341_BLACK); // Copy to screen
 }
@@ -464,6 +441,11 @@ void displayUpdateChan2V() {
 
   if (getChannel2State()) {
     foreground = ILI9341_GREEN;
+    outputValue = (VREF_MV / 4096) * getChannel2Voltage() * OUT_GAIN;
+    // Serial.println("ping");
+  } else {
+    outputValue = (VREF_MV / 4096) * (chan2Vcode - CHAN2V_OFFSET) * OUT_GAIN;
+    // Serial.println("pong");
   }
 
   if (getOutputMode() == MODE_CV) {
@@ -475,8 +457,8 @@ void displayUpdateChan2V() {
   canvasChan2V.fillScreen(ILI9341_BLACK);
   canvasChan2V.setCursor(0, 38);
 
-  canvasChan2V.print('-'); // padding is easier if we hardcode the - instead,
-                           // else it "moves around"
+  canvasChan2V.print('-'); // Padding is easier if we hardcode the - instead,
+                           // otherwise it "moves around"
 
   if (outputValue < 10000) { // in mV, so 10000 = 10V
     canvasChan2V.print("0");

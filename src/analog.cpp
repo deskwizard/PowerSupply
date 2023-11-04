@@ -93,7 +93,7 @@ void handleAnalog() {
   uint32_t currentMillis = millis();
   static uint32_t previousMillis = 0;
 
-  if (((uint32_t)(currentMillis - previousMillis) >= 1) && getChannel1State()) {
+  if (((uint32_t)(currentMillis - previousMillis) >= 1)) {
 
     static uint8_t readIndex = 0;
 
@@ -102,23 +102,34 @@ void handleAnalog() {
     static uint16_t readingsChan2V[ADC_READ_AVG] = {0};
     static uint16_t readingsChan2I[ADC_READ_AVG] = {0};
 
-    // Subtract the last readings
-    totalChan1V = totalChan1V - readingsChan1V[readIndex];
-    totalChan1I = totalChan1I - readingsChan1I[readIndex];
-    totalChan2V = totalChan2V - readingsChan2V[readIndex];
-    totalChan2I = totalChan2I - readingsChan2I[readIndex];
+    if (getChannel1State()) {
+      // Subtract the last readings
+      totalChan1V = totalChan1V - readingsChan1V[readIndex];
+      totalChan1I = totalChan1I - readingsChan1I[readIndex];
 
-    // Read ADC channels
-    readingsChan1V[readIndex] = adc.read(ADC_CHAN1_V, SD);
-    readingsChan1I[readIndex] = adc.read(ADC_CHAN1_I, SD);
-    readingsChan2V[readIndex] = adc.read(ADC_CHAN2_V, SD);
-    readingsChan2I[readIndex] = adc.read(ADC_CHAN2_I, SD);
+      // Read ADC channels
+      readingsChan1V[readIndex] = adc.read(ADC_CHAN1_V, SD);
+      readingsChan1I[readIndex] = adc.read(ADC_CHAN1_I, SD);
 
-    // Add readings to the total
-    totalChan1V = totalChan1V + readingsChan1V[readIndex];
-    totalChan1I = totalChan1I + readingsChan1I[readIndex];
-    totalChan2V = totalChan2V + readingsChan2V[readIndex];
-    totalChan2I = totalChan2I + readingsChan2I[readIndex];
+      // Add readings to the total
+      totalChan1V = totalChan1V + readingsChan1V[readIndex];
+      totalChan1I = totalChan1I + readingsChan1I[readIndex];
+    }
+
+    if (getChannel2State()) {
+
+      // Subtract the last readings
+      totalChan2V = totalChan2V - readingsChan2V[readIndex];
+      totalChan2I = totalChan2I - readingsChan2I[readIndex];
+
+      // Read ADC channels
+      readingsChan2V[readIndex] = adc.read(ADC_CHAN2_V, SD);
+      readingsChan2I[readIndex] = adc.read(ADC_CHAN2_I, SD);
+
+      // Add readings to the total
+      totalChan2V = totalChan2V + readingsChan2V[readIndex];
+      totalChan2I = totalChan2I + readingsChan2I[readIndex];
+    }
 
     // Advance to the next position in the array:
     readIndex = readIndex + 1;
@@ -154,7 +165,9 @@ void writeDAC() {
   }
 
   dac.set(0, dacValue);
-
+  dac.set(2, dacValue);
+  dac.set(4, dacValue / 2);
+  dac.set(6, dacValue);
   Serial.print("DAC: ");
   Serial.println(dacValue);
 }
@@ -165,7 +178,7 @@ void readADC() {
   float voltage = 0;
 
   // for (int x = 0; x <= 7; x++) {
-  for (int x = 0; x <= 1; x++) {
+  for (int x = 0; x <= 6; x = x + 2) {
 
     read_value = adc.read(x, SD);
     voltage = read_value * (2500.0 / 4096.0);
@@ -191,6 +204,13 @@ void testAnalog() {
   if ((uint32_t)(currentMillis - previousMillis) >= 500) {
     writeDAC();
     readADC();
+
+    Serial.print("Chan1V: ");
+    Serial.println(getChannel1Voltage());
+
+    Serial.print("Chan2V: ");
+    Serial.println(getChannel2Voltage());
+
     previousMillis = currentMillis;
   }
 }

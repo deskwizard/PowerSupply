@@ -112,6 +112,8 @@ void blinking() {
 
     displayUpdateChan1V();
     displayUpdateChan1I();
+    displayUpdateChan2V();
+    displayUpdateChan2I();
 
     ledState = !ledState;
     digitalWrite(DEBUG_LED, ledState);
@@ -197,7 +199,7 @@ void scanI2C() {
 
     nDevices = 0;
     for (address = 1; address < 127; address++) {
-      
+
       // Uses the return value of the Wiree.endTransmisstion to see if
       // a device acknowledge the address.
       Wire.beginTransmission(address);
