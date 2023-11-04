@@ -145,9 +145,12 @@ void displayTracking() {
   drawBorders();
 
   // Smallest possible rectangle to erase
-  lcd.fillRect(60, 150, 105, 25, ZONE_COLOR);
+  // lcd.fillRect(60, 150, 105, 25, ZONE_COLOR);
 
   if (getTrackingMode()) {
+
+    // Debug
+    return;
 
     // Just show the tracking indicator if we are tracking
     lcd.setTextColor(ILI9341_WHITE);
@@ -235,19 +238,20 @@ void drawBorders() {
                       X_RES - (2 * BORDER_SIZE), BORDERS_H - (2 * BORDER_SIZE),
                       ROUNDYNESS, ILI9341_BLACK);
 
-  } else if (getTrackingMode()) {
+  } //
+  else if (getTrackingMode()) {
     uint16_t color = COLOR_TRACK_OFF;
 
     // One color fill + 1 smaller black fill  = border
     lcd.fillRoundRect(0, 0, X_RES, Y_RES, ROUNDYNESS, color);
     lcd.fillRoundRect(BORDER_SIZE, BORDER_SIZE, X_RES - (2 * BORDER_SIZE),
                       Y_RES - (2 * BORDER_SIZE), ROUNDYNESS, ILI9341_BLACK);
-
-    // Draw the fancy bar that's displays between CH1 and CH2
-    lcd.fillRoundRect(12, 15, 30, 185, 15, color);
-    lcd.fillRoundRect(17, 20, 40, 175, 15, ILI9341_BLACK);
-    lcd.fillRect(27, 10, 20, 200, ZONE_COLOR); // clip it before text
-
+    /*
+        // Draw the fancy bar that's displays between CH1 and CH2
+        lcd.fillRoundRect(12, 15, 30, 185, 15, color);
+        lcd.fillRoundRect(17, 20, 40, 175, 15, ILI9341_BLACK);
+        lcd.fillRect(27, 10, 20, 200, ZONE_COLOR); // clip it before text
+     */
   }
 
   else {
