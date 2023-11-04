@@ -486,30 +486,22 @@ void displayUpdateChan2I() {
   // the function is called. (wtf...)
   canvasChan2I.setCursor(0, 38);
 
-  canvasChan2I.print('-');
-
-  // Always show the code for now
-  canvasChan2I.print(float(chan2Icode / 1000.0), 3);
-
-  if (getChannel2State()) {
+  if (getChannel2ErrorFlag() == true) {
+    foreground = ILI9341_RED;
+    canvasChan2I.setFont(&FreeSansBold18pt7b);
+    canvasChan2I.print("LIMIT");
+  } else if (getChannel2State()) {
     foreground = ILI9341_GREEN;
+    canvasChan2I.print(float(getChannel2Current() / 1000.0), 3);
+  } else {
+    if (chan2Icode >= 0) {
+      canvasChan2I.print(float(chan2Icode / 1000.0), 3);
+    } else {
+      canvasChan2I.print("--------");
+      // TODO wipe indicator, show on 0 crossing upwards
+    }
   }
 
-  /*
-    if (chan2_enabled == false) {
-      if (modeSetting == MODE_CV) {
-        canvasChan2I.print("--------");
-      } else {
-        canvasChan2I.print(float(chan2Icode / 1000.0), 3);
-      }
-
-    } else {
-      foreground = ILI9341_GREEN;
-      // Print fake number for the actual current reading if enabled
-      canvasChan2I.print(fakeReading2I, 3);
-    }
-
-  */
   lcd.drawBitmap(40, I2_ROW - 38, canvasChan2I.getBuffer(), 132, 40, foreground,
                  ILI9341_BLACK); // Copy to screen
 }
@@ -590,15 +582,10 @@ void displaySelector2() {
 
 void displayMode() {
 
-  // lcd.fillRect(190, ORIGIN + 10, 35, 20, ZONE_COLOR);
-  // lcd.fillRect(190, 10, 35, 20, ZONE_COLOR);
-  // lcd.fillRect(60, 150, 105, 25, ZONE_COLOR);
   lcd.fillRect(190, 150, 35, 20, ILI9341_BLACK);
 
   lcd.setFont(&FreeSansBold12pt7b);
   lcd.setTextSize(0);
-  // lcd.setCursor(190, 28);
-  // lcd.setCursor(70, 168);
   lcd.setCursor(190, 168);
 
   if (getOutputMode() == MODE_CV) {
