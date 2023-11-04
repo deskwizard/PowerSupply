@@ -23,7 +23,7 @@ void lcdInit0() {
 
   lcd.begin(80000000);
 
-  lcd.setRotation(3);
+  lcd.setRotation(0);
 
   displayTitle();
 }
@@ -41,12 +41,12 @@ void lcdInit() {
   drawBorders();
 
   displaySelector1();
-  // displaySelector2();
+  displaySelector2();
 
-  // displayMode();
+  displayMode();
 
   displayCh1State();
-  // displayCh2State();
+  displayCh2State();
 }
 
 void handleDisplay() {
@@ -217,17 +217,13 @@ void displayRange() {
 
 void drawBorders() {
 
-  if (getRailSetting() == SINGLE) {
-
-    // TODO: Will need rework for rotation if ever used.
+  if (getRailSetting()) {
     lcd.fillScreen(ILI9341_BLACK);
 
-    // Channel 1
     lcd.fillRoundRect(0, 0, X_RES, BORDERS_H, ROUNDYNESS, COLOR_HR_OFF);
     lcd.fillRoundRect(BORDER_SIZE, BORDER_SIZE, X_RES - (2 * BORDER_SIZE),
                       BORDERS_H - (2 * BORDER_SIZE), ROUNDYNESS, ILI9341_BLACK);
 
-    // Channel 2
     lcd.fillRoundRect(0, ORIGIN, X_RES, BORDERS_H, ROUNDYNESS,
                       ILI9341_DARKGREY);
     lcd.fillRoundRect(BORDER_SIZE, ORIGIN + BORDER_SIZE,
@@ -254,21 +250,18 @@ void drawBorders() {
     // Let's do something to remove the 2 pink bars both sides
     lcd.fillScreen(ILI9341_BLACK);
 
-    lcd.fillRoundRect(0, 0, BORDER_W, Y_RES, ROUNDYNESS, COLOR_CHAN1_OFF);
+    lcd.fillRoundRect(0, 0, X_RES, BORDERS_H, ROUNDYNESS, COLOR_CHAN1_OFF);
+    lcd.fillRoundRect(BORDER_SIZE, BORDER_SIZE, X_RES - (2 * BORDER_SIZE),
+                      BORDERS_H - (2 * BORDER_SIZE), ROUNDYNESS, ILI9341_BLACK);
 
-    lcd.fillRoundRect(BORDER_SIZE, BORDER_SIZE, BORDER_W - (2 * BORDER_SIZE),
-                      Y_RES - (2 * BORDER_SIZE), ROUNDYNESS, ILI9341_BLACK);
-
-    lcd.fillRoundRect(BORDER_W + CENTER_SPACING, 0, BORDER_W, Y_RES, ROUNDYNESS,
-                      COLOR_CHAN2_OFF);
-
-    lcd.fillRoundRect(BORDER_W + CENTER_SPACING + BORDER_SIZE, BORDER_SIZE,
-                      BORDER_W - (2 * BORDER_SIZE), Y_RES - (2 * BORDER_SIZE),
+    lcd.fillRoundRect(0, ORIGIN, X_RES, BORDERS_H, ROUNDYNESS, COLOR_CHAN2_OFF);
+    lcd.fillRoundRect(BORDER_SIZE, ORIGIN + BORDER_SIZE,
+                      X_RES - (2 * BORDER_SIZE), BORDERS_H - (2 * BORDER_SIZE),
                       ROUNDYNESS, ILI9341_BLACK);
   }
 
   displayHeaders1();
-  // displayHeaders2();
+  displayHeaders2();
 }
 
 void displayHeaders1() {

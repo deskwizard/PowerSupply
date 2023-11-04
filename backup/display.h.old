@@ -20,8 +20,8 @@
 
 #define DISPLAY_UPDATE_RATE 250
 
-#define X_RES 320 // pixels
-#define Y_RES 240
+#define X_RES 240 // pixels
+#define Y_RES 320
 
 // Origin point for drawing channel 2 stuff
 #define ORIGIN  (Y_RES - BORDERS_H) - 1 
@@ -36,9 +36,7 @@
 // #define ZONE_COLOR ILI9341_BLUE
 #define ZONE_COLOR ILI9341_BLACK
 
-#define CENTER_SPACING 20
-#define BORDER_W ((X_RES - CENTER_SPACING) /2)
-#define BORDERS_H 220
+#define BORDERS_H 140
 #define BORDER_SIZE 4
 #define ROUNDYNESS 12
 

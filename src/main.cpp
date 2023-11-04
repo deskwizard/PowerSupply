@@ -78,6 +78,8 @@ void setup() {
 
   serial_println("Ready");
   serial_println();
+
+  while(1);
 }
 
 void loop() {

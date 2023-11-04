@@ -9,10 +9,10 @@ DAC7678 dac(DAC_ADDR);
 // Needs to be signed for encoder step size things...
 // -1 here is used to display dashes on the display
 // Yeah, wtf was I thinking... FixMe
-int16_t chan1Vcode = 500;
+int16_t chan1Vcode = 2000;
 int16_t chan1Icode = -1;
 
-int16_t chan2Vcode = 500;
+int16_t chan2Vcode = 2000;
 int16_t chan2Icode = -1;
 
 // Running totals
