@@ -7,7 +7,7 @@ Adafruit_ILI9341 lcd = Adafruit_ILI9341(LCD_CS, LCD_DC, LCD_RST);
 GFXcanvas1 canvasChan1V(115, 40); // 115x40 pixel canvas
 GFXcanvas1 canvasChan1I(115, 40); // 115x40 pixel canvas
 GFXcanvas1 canvasChan2V(132, 40); // 132x40 pixel canvas
-GFXcanvas1 canvasChan2I(132, 40); // 132x40 pixel canvas
+GFXcanvas1 canvasChan2I(115, 40); // 132x40 pixel canvas
 
 // I'm going to have to rework this because colors are a mess now...
 // const uint32_t colors[3][3] = {
@@ -497,12 +497,13 @@ void displayUpdateChan2I() {
     if (chan2Icode >= 0) {
       canvasChan2I.print(float(chan2Icode / 1000.0), 3);
     } else {
-      canvasChan2I.print("--------");
+      //canvasChan2I.print("0");
+      canvasChan2I.print("-------");
       // TODO wipe indicator, show on 0 crossing upwards
     }
   }
 
-  lcd.drawBitmap(40, I2_ROW - 38, canvasChan2I.getBuffer(), 132, 40, foreground,
+  lcd.drawBitmap(60, I2_ROW - 38, canvasChan2I.getBuffer(), 115, 40, foreground,
                  ILI9341_BLACK); // Copy to screen
 }
 
