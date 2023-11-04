@@ -214,7 +214,6 @@ void displayRange() {
 
   displayMode();
 }
-void redrawChan1Borders() {}
 
 void drawBorders() {
 
