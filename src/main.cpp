@@ -87,10 +87,9 @@ void loop() {
   handleKeys();
   handleExpanderInputs();
   handleEncoders();
-
-  handleSerial();
-
   handleAnalog();
+  handleDisplay();
+  handleSerial();
 
   // debug
   blinking();
@@ -109,11 +108,6 @@ void blinking() {
 
     // Serial.print("loop() running on core ");
     // Serial.println(xPortGetCoreID());
-
-    displayUpdateChan1V();
-    displayUpdateChan1I();
-    displayUpdateChan2V();
-    displayUpdateChan2I();
 
     ledState = !ledState;
     digitalWrite(DEBUG_LED, ledState);

@@ -49,6 +49,23 @@ void lcdInit() {
   displayCh2State();
 }
 
+void handleDisplay() {
+
+  uint32_t currentMillis = millis();
+  static uint32_t previousMillis = 0;
+  static bool ledState = false;
+
+  if ((uint32_t)(currentMillis - previousMillis) >= DISPLAY_UPDATE_RATE) {
+
+    displayUpdateChan1V();
+    displayUpdateChan1I();
+    displayUpdateChan2V();
+    displayUpdateChan2I();
+
+    previousMillis = currentMillis;
+  }
+}
+
 void displayCh1State() {
 
   lcd.fillRect(100, 10, 50, 20, ZONE_COLOR);

@@ -8,8 +8,6 @@
 #include "defines.h"
 #include "externs.h"
 
-#define AOFF // lol wtf is that
-
 #include "Adafruit_GFX.h"
 #include "Adafruit_ILI9341.h"
 #include <Fonts/FreeSans12pt7b.h>
@@ -20,13 +18,15 @@
 #include <Fonts/FreeSansBold24pt7b.h>
 #include <Fonts/FreeSansBold9pt7b.h>
 
+#define DISPLAY_UPDATE_RATE 250
+
 #define X_RES 240 // pixels
 #define Y_RES 320
 
-#define ORIGIN                                                                 \
-  (Y_RES - BORDERS_H) - 1 // Origin point for drawing channel 2 stuff
+// Origin point for drawing channel 2 stuff
+#define ORIGIN / (Y_RES - BORDERS_H) - 1 
 
-#define IND_LOC_X 180 // X position of the Vs and As
+#define IND_LOC_X 180 // X position of the value canvases
 
 #define V1_ROW 76
 #define I1_ROW V1_ROW + 49
@@ -64,6 +64,7 @@ void drawBorders(bool bright); //
 
 void lcdInit0();
 void lcdInit();
+void handleDisplay();
 void displayCh1State();
 void displayCh2State();
 void displayTitle();
