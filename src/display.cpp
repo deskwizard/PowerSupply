@@ -36,7 +36,8 @@ void lcdInit() {
   lcd.setFont(&FreeSansBold18pt7b);
   lcd.setCursor(40, 270);
   lcd.print("Starting!");
-  delay(2000);
+
+  // delay(2000);
 
   drawBorders();
 
@@ -46,7 +47,7 @@ void lcdInit() {
   // displayMode();
 
   displayCh1State();
-  // displayCh2State();
+  displayCh2State();
 }
 
 void handleDisplay() {
@@ -59,8 +60,8 @@ void handleDisplay() {
 
     displayUpdateChan1V();
     displayUpdateChan1I();
-    displayUpdateChan2V();
-    displayUpdateChan2I();
+    // displayUpdateChan2V();
+    // displayUpdateChan2I();
 
     previousMillis = currentMillis;
   }
@@ -68,9 +69,9 @@ void handleDisplay() {
 
 void displayCh1State() {
 
-  lcd.fillRect(100, 10, 50, 20, ZONE_COLOR);
+  lcd.fillRect(90, 10, 50, 20, ZONE_COLOR);
 
-  lcd.setCursor(100, 28);
+  lcd.setCursor(90, 28);
   lcd.setFont(&FreeSansBold12pt7b);
   lcd.setTextSize(0);
 
@@ -97,7 +98,7 @@ void displayCh1State() {
   }
 
   displayHeaders1();
-  displayUnits1();
+  // displayUnits1();
   displayUpdateChan1V();
   displayUpdateChan1I();
 }
@@ -111,9 +112,9 @@ void displayCh2State() {
     return;
   }
 
-  lcd.fillRect(100, ORIGIN + 10, 50, 20, ZONE_COLOR);
+  lcd.fillRect(255, 10, 50, 20, ZONE_COLOR);
 
-  lcd.setCursor(100, ORIGIN + 28);
+  lcd.setCursor(255, 28);
   lcd.setFont(&FreeSansBold12pt7b);
   lcd.setTextSize(0);
 
@@ -134,9 +135,9 @@ void displayCh2State() {
   }
 
   displayHeaders2();
-  displayUnits2();
+  // displayUnits2();
   displayUpdateChan2V();
-  displayUpdateChan2I();
+  // displayUpdateChan2I();
 }
 
 void displayTracking() {
@@ -294,10 +295,10 @@ void displayHeaders1() {
     }
   }
 
-  lcd.setCursor(30, 28);
+  lcd.setCursor(BORDER_SIZE * 2, 28);
   lcd.print("CH1");
 
-  displayUnits1();
+  // displayUnits1();
 }
 
 void displayHeaders2() {
@@ -312,7 +313,7 @@ void displayHeaders2() {
     lcd.print("Unavailable");
   } else {
 
-    displayUnits2();
+    // displayUnits2();
 
     if (getChannel2State()) {
       if (getTrackingMode()) {
@@ -335,10 +336,10 @@ void displayHeaders2() {
 
   lcd.setFont(&FreeSansBold12pt7b);
   lcd.setTextSize(0);
-  lcd.setCursor(30, ORIGIN + 28);
+  lcd.setCursor(BORDER_W + (BORDER_SIZE * 2) + CENTER_SPACING, 28);
   lcd.print("CH2");
 }
-
+/*
 void displayUnits1() {
 
   lcd.setFont(&FreeSansBold24pt7b);
@@ -374,7 +375,7 @@ void displayUnits2() {
   lcd.setCursor(IND_LOC_X, I2_ROW);
   lcd.print('A');
 }
-
+ */
 void displayUpdateChan1V() {
 
   uint32_t foreground = ILI9341_DARKGREEN;
@@ -412,8 +413,9 @@ void displayUpdateChan1V() {
   }
 
   canvasChan1V.print(float(outputValue / 1000.0), 2);
+  //canvasChan1V.print(99.0, 2);
 
-  lcd.drawBitmap(60, 37, canvasChan1V.getBuffer(), 115, 40, foreground,
+  lcd.drawBitmap(10, 37, canvasChan1V.getBuffer(), 115, 40, foreground,
                  ILI9341_BLACK); // Copy to screen
 }
 
@@ -449,7 +451,7 @@ void displayUpdateChan1I() {
     }
   }
 
-  lcd.drawBitmap(60, 86, canvasChan1I.getBuffer(), 115, 40, foreground,
+  lcd.drawBitmap(10, 86, canvasChan1I.getBuffer(), 115, 40, foreground,
                  ILI9341_BLACK); // Copy to screen
 }
 
@@ -527,23 +529,23 @@ void displayUpdateChan2I() {
 void displaySelector1() {
 
   static uint16_t v_origin = V1_ROW + 5;
-  uint16_t h_origin = 152;
+  uint16_t h_origin = 102;
   uint8_t length = 24;
 
   if (getOutputMode() == MODE_CC) {
     if (v_origin == V1_ROW + 5) { // Wipe the previous indicator
-      lcd.fillRect(60, v_origin, 120, 5, ZONE_COLOR);
+      lcd.fillRect(10, v_origin, 120, 5, ZONE_COLOR);
     }
     v_origin = I1_ROW + 5;
   } else {                        // We're in CV mode
     if (v_origin == I1_ROW + 5) { // Wipe the previous indicator
-      lcd.fillRect(60, v_origin, 120, 5, ZONE_COLOR);
+      lcd.fillRect(10, v_origin, 120, 5, ZONE_COLOR);
     }
     v_origin = V1_ROW + 5;
   }
 
   // Wipe current indicator
-  lcd.fillRect(60, v_origin, 120, 5, ZONE_COLOR);
+  lcd.fillRect(10, v_origin, 120, 5, ZONE_COLOR);
 
   if (stepSizeEnc1 == 100) {
     h_origin = 62;
@@ -553,7 +555,7 @@ void displaySelector1() {
     }
 
   } else if (stepSizeEnc1 == 10) {
-    h_origin = 126;
+    h_origin = 76;
   }
 
   for (uint8_t x = 0; x <= 3; x++) {

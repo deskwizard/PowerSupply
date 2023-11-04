@@ -26,7 +26,7 @@
 // Origin point for drawing channel 2 stuff
 #define ORIGIN  (Y_RES - BORDERS_H) - 1 
 
-#define IND_LOC_X 180 // X position of the value canvases
+#define IND_LOC_X 130 // X position of the value canvases
 
 #define V1_ROW 76
 #define I1_ROW V1_ROW + 49
@@ -36,7 +36,7 @@
 // #define ZONE_COLOR ILI9341_BLUE
 #define ZONE_COLOR ILI9341_BLACK
 
-#define CENTER_SPACING 20
+#define CENTER_SPACING 10
 #define BORDER_W ((X_RES - CENTER_SPACING) /2)
 #define BORDERS_H 220
 #define BORDER_SIZE 4
@@ -78,8 +78,8 @@ void displayMode();
 void displayTracking();
 void displayHeaders1();
 void displayHeaders2();
-void displayUnits1();
-void displayUnits2();
+//void displayUnits1();
+//void displayUnits2();
 void displayUpdateChan1V();
 void displayUpdateChan1I();
 void displayUpdateChan2V();
