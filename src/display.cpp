@@ -87,7 +87,7 @@ void displayCh1State() {
 
 void displayCh2State() {
 
-  // maybe not the best place for this check, works for now
+  // Maybe not the best place for this check, works for now
   // stops the rail switch from triggering printing the numbers
   // before drawing the borders (and again over it)
   if (getRailSetting() == SINGLE) {
@@ -222,7 +222,7 @@ void drawBorders() {
     lcd.fillRoundRect(BORDER_SIZE, BORDER_SIZE, X_RES - (2 * BORDER_SIZE),
                       Y_RES - (2 * BORDER_SIZE), ROUNDYNESS, ILI9341_BLACK);
 
-    // the fancy bar that's displays between CH1 and CH2
+    // Draw the fancy bar that's displays between CH1 and CH2
     lcd.fillRoundRect(12, 15, 30, 185, 15, color);
     lcd.fillRoundRect(17, 20, 40, 175, 15, ILI9341_BLACK);
     lcd.fillRect(27, 10, 20, 200, ZONE_COLOR); // clip it before text
@@ -231,7 +231,7 @@ void drawBorders() {
 
   else {
 
-    // Lets do something to remove the 2 pink bars both sides
+    // Let's do something to remove the 2 pink bars both sides
     lcd.fillScreen(ILI9341_BLACK);
 
     lcd.fillRoundRect(0, 0, X_RES, BORDERS_H, ROUNDYNESS, COLOR_CHAN1_OFF);
@@ -379,14 +379,12 @@ void displayUpdateChan1V() {
 
   if (getChannel1State()) {
     foreground = ILI9341_GREEN;
-    // Serial.println("pouf");
     outputValue = (VREF_MV / 4096) * getChannel1Voltage() * OUT_GAIN;
   } else {
     outputValue = (VREF_MV / 4096) * (chan1Vcode - CHAN1V_OFFSET) * OUT_GAIN;
-    // Serial.println("pow");
   }
 
-  if (outputValue < 10000) { // in mV, so 10000 = 10V
+  if (outputValue < 10000) { // In mV, so 10000 = 10V
     canvasChan1V.print("  ");
   }
 
@@ -409,7 +407,7 @@ void displayUpdateChan1I() {
   }
 
   // Needs to be here, else the cursor is wrong the first time
-  // the function is called. (wtf...)
+  // the function is called.
   canvasChan1I.setCursor(0, 38);
 
   if (getChannel1ErrorFlag() == true) {
@@ -442,10 +440,8 @@ void displayUpdateChan2V() {
   if (getChannel2State()) {
     foreground = ILI9341_GREEN;
     outputValue = (VREF_MV / 4096) * getChannel2Voltage() * OUT_GAIN;
-    // Serial.println("ping");
   } else {
     outputValue = (VREF_MV / 4096) * (chan2Vcode - CHAN2V_OFFSET) * OUT_GAIN;
-    // Serial.println("pong");
   }
 
   if (getOutputMode() == MODE_CV) {
@@ -457,12 +453,11 @@ void displayUpdateChan2V() {
   canvasChan2V.fillScreen(ILI9341_BLACK);
   canvasChan2V.setCursor(0, 38);
 
-  canvasChan2V.print('-'); // Padding is easier if we hardcode the - instead,
-                           // otherwise it "moves around"
-
-  if (outputValue < 10000) { // in mV, so 10000 = 10V
-    canvasChan2V.print("0");
+  if (outputValue < 10000) { // In mV, so 10000 = 10V
+    canvasChan2V.setCursor(26, 38);
   }
+
+  canvasChan2V.print('-');
 
   canvasChan2V.print(float(outputValue / 1000.0), 2);
 
@@ -483,7 +478,7 @@ void displayUpdateChan2I() {
   }
 
   // Needs to be here, else the cursor is wrong the first time
-  // the function is called. (wtf...)
+  // the function is called.
   canvasChan2I.setCursor(0, 38);
 
   if (getChannel2ErrorFlag() == true) {
@@ -497,7 +492,6 @@ void displayUpdateChan2I() {
     if (chan2Icode >= 0) {
       canvasChan2I.print(float(chan2Icode / 1000.0), 3);
     } else {
-      //canvasChan2I.print("0");
       canvasChan2I.print("-------");
       // TODO wipe indicator, show on 0 crossing upwards
     }
