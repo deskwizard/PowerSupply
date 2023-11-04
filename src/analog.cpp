@@ -7,17 +7,13 @@ ADS7828 adc(ADC_ADDR);
 DAC7678 dac(DAC_ADDR);
 
 // Needs to be signed for encoder step size things...
+// -1 here is used to display dashes on the display
+// Yeah, wtf was I thinking... FixMe
 int16_t chan1Vcode = 500;
-int16_t chan1Icode = -1; // ----------- WTF?? -----------
-// int16_t chan1VRead;
-// int16_t chan1IRead;
+int16_t chan1Icode = -1;
 
 int16_t chan2Vcode = 500;
-int16_t chan2Icode = 0;
-// int16_t chan2VRead;
-// int16_t chan2IRead;
-
-// Let's somewhat do it right
+int16_t chan2Icode = -1;
 
 // Running totals
 uint32_t totalChan1V = 0;
