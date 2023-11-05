@@ -9,10 +9,10 @@ DAC7678 dac(DAC_ADDR);
 // Needs to be signed for encoder step size things...
 // -1 here is used to display dashes on the display
 // Yeah, wtf was I thinking... FixMe
-int16_t chan1Vcode = 4000;
+int16_t chan1Vcode = 0;
 int16_t chan1Icode = 0;
 
-int16_t chan2Vcode = 4200;
+int16_t chan2Vcode = 0;
 int16_t chan2Icode = 0;
 
 // Running totals
@@ -57,7 +57,7 @@ void initDAC() {
 void setChan1V(uint16_t code) {
   chan1Vcode = code;
   dac.set(DAC_CHAN1_V, chan1Vcode);
-  printChan1V();
+  //printChan1V();
 }
 
 void setChan1I(uint16_t code) {

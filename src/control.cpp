@@ -93,20 +93,33 @@ void changeChan2I(bool direction) {
   displayUpdateChan2I();
 }
 
+uint16_t outputValue = 200;
+
 void changeChan1V(bool direction) {
+
   if (direction == UP) {
-    chan1Vcode = chan1Vcode + (stepSizeEnc1 >> railSetting);
-
-    if (chan1Vcode > MAX_V_CODE) {
-      chan1Vcode = MAX_V_CODE;
-    }
+    outputValue = outputValue + (stepSizeEnc1 >> railSetting);
+    /*
+        if (chan1Vcode > MAX_V_CODE) {
+          chan1Vcode = MAX_V_CODE;
+        }
+         */
   } else {
-    chan1Vcode = chan1Vcode - (stepSizeEnc1 >> railSetting);
+    outputValue = outputValue - (stepSizeEnc1 >> railSetting);
 
-    if (chan1Vcode < 0) {
-      chan1Vcode = 0;
+    if (outputValue < 0) {
+      outputValue = 0;
     }
   }
+
+  chan1Vcode = outputValue * (VREF_MV / 4096.0);
+
+  Serial.print("Output value: ");
+  Serial.print(outputValue);
+  Serial.print("   code: ");
+  Serial.print(chan1Vcode);
+  Serial.println();
+  Serial.println();
 
   setChan1V(chan1Vcode);
 
